@@ -3,40 +3,20 @@
     <div class="container">
       <div class="tableBar">
         <label style="margin-right: 5px">员工姓名：</label>
-        <el-input
-          v-model="input"
-          placeholder="请输入员工姓名"
-          style="width: 15%"
-          clearable
-          @clear="init"
-          @keyup.enter.native="initFun"
-        />
-        <el-button class="normal-btn continue" @click="init(true)">
-          查询
-        </el-button>
-        <el-button
-          type="primary"
-          style="float: right"
-          @click="addEmployeeHandle('add')"
-        >
+        <el-input v-model="input" placeholder="请输入员工姓名" style="width: 15%" clearable @clear="init"
+          @keyup.enter.native="initFun" />
+        <el-button class="normal-btn continue" @click="init(true)">查询</el-button>
+        <el-button type="primary" style="float: right" @click="addEmployeeHandle('add')">
           + 添加员工
         </el-button>
       </div>
-      <el-table
-        v-if="tableData.length"
-        :data="tableData"
-        stripe
-        class="tableBox"
-      >
+      <el-table :data="tableData" stripe v-if="tableData.length" class="tableBox">
         <el-table-column prop="name" label="员工姓名" />
         <el-table-column prop="username" label="账号" />
         <el-table-column prop="phone" label="手机号" />
         <el-table-column label="账号状态">
           <template slot-scope="scope">
-            <div
-              class="tableColumn-status"
-              :class="{ 'stop-use': String(scope.row.status) === '0' }"
-            >
+            <div class="tableColumn-status" :class="{ 'stop-use': String(scope.row.status) === '0' }">
               {{ String(scope.row.status) === '0' ? '禁用' : '启用' }}
             </div>
           </template>
@@ -44,43 +24,25 @@
         <el-table-column prop="updateTime" label="最后操作时间" />
         <el-table-column label="操作" width="160" align="center">
           <template slot-scope="scope">
-            <el-button
-              type="text"
-              size="small"
-              class="blueBug"
-              :class="{ 'disabled-text': scope.row.username === 'admin' }"
-              :disabled="scope.row.username === 'admin'"
-              @click="addEmployeeHandle(scope.row.id, scope.row.username)"
-            >
+            <el-button type="text" size="small" class="blueBug"
+              :class="{ 'disabled-text': scope.row.username === 'admin' }" :disabled="scope.row.username === 'admin'"
+              @click="addEmployeeHandle(scope.row.id, scope.row.username)">
               修改
             </el-button>
-            <el-button
-              :disabled="scope.row.username === 'admin'"
-              type="text"
-              size="small"
-              class="non"
-              :class="{
-                'disabled-text': scope.row.username === 'admin',
-                blueBug: scope.row.status == '0',
-                delBut: scope.row.status != '0'
-              }"
-              @click="statusHandle(scope.row)"
-            >
+            <el-button :disabled="scope.row.username === 'admin'" type="text" size="small" class="non" :class="{
+              'disabled-text': scope.row.username === 'admin',
+              blueBug: scope.row.status == '0',
+              delBut: scope.row.status != '0'
+            }" @click="statusHandle(scope.row)">
               {{ scope.row.status == '1' ? '禁用' : '启用' }}
             </el-button>
           </template>
         </el-table-column>
       </el-table>
       <Empty v-else :is-search="isSearch" />
-      <el-pagination
-        class="pageList"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="counts"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+      <el-pagination class="pageList" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="counts" @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>

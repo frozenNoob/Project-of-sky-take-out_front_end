@@ -1,25 +1,45 @@
 <template>
-  <div class="sidebar">
-    <el-menu>
-      <el-menu-item index="1-1">
-        <router-link to="/admin/dashboard">工作台</router-link>
-      </el-menu-item>
-      <el-menu-item index="1-2">
-        <router-link to="/admin/statistics">数据统计</router-link>
-      </el-menu-item>
-      <el-menu-item index="1-3">
-        <router-link to="/admin/order">订单管理</router-link>
-      </el-menu-item>
-      <el-menu-item index="1-4">
-        <router-link to="/admin/setmeal">套餐管理</router-link>
-      </el-menu-item>
-      <el-menu-item index="1-5">
-        <router-link to="/admin/dish">菜品管理</router-link>
-      </el-menu-item>
-      <el-menu-item index="1-6">
-        <router-link to="/admin/category">分类管理</router-link>
-      </el-menu-item>
-    </el-menu>
+  <div>
+    <div class="logo">
+      <!-- <img
+        src="./../../../assets/logo.png"
+        width="122.5"
+        alt=""
+      > -->
+      <!-- <img
+        src="@/assets/login/login-logo.png"
+        alt=""
+        style="width: 120px; height: 31px"
+      /> -->
+      <div v-if="!isCollapse" class="sidebar-logo">
+        <img src="@/assets/login/logo.png" style="width: 120px; height: 31px">
+      </div>
+      <div v-else class="sidebar-logo-mini">
+        <img src="@/assets/login/mini-logo.png">
+      </div>
+    </div>
+    <div class="sidebar">
+      <el-menu>
+        <el-menu-item index="1-1">
+          <router-link to="/admin/dashboard">工作台</router-link>
+        </el-menu-item>
+        <el-menu-item index="1-2">
+          <router-link to="/admin/statistics">数据统计</router-link>
+        </el-menu-item>
+        <el-menu-item index="1-3">
+          <router-link to="/admin/order">订单管理</router-link>
+        </el-menu-item>
+        <el-menu-item index="1-4">
+          <router-link to="/admin/setmeal">套餐管理</router-link>
+        </el-menu-item>
+        <el-menu-item index="1-5">
+          <router-link to="/admin/dish">菜品管理</router-link>
+        </el-menu-item>
+        <el-menu-item index="1-6">
+          <router-link to="/admin/category">分类管理</router-link>
+        </el-menu-item>
+      </el-menu>
+    </div>
   </div>
 </template>
 
@@ -91,19 +111,44 @@ export default class extends Vue {
   get isCollapse() {
     return !this.sidebar.opened
   }
-  private async logout() {
-    this.$store.dispatch('LogOut').then(() => {
-      // location.href = '/'
-      this.$router.replace({ path: '/admin/login' })
-    })
-    // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-  }
+  // private async logout() {
+  //   this.$store.dispatch('LogOut').then(() => {
+  //     // location.href = '/'
+  //     this.$router.replace({ path: '/login' })
+  //   })
+  //   // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+  // }
 }
 </script>
 
 <style lang="scss" scoped>
-.sidebar {
+.logo {
+  text-align: center;
+  background-color: #ffc100;
+  padding: 15px 0 0;
+  height: 60px;
+
+  img {
+    display: inline-block;
+  }
+}
+
+.sidebar-logo-mini {
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.el-scrollbar {
   height: 100%;
-  background-color:#ffc200;
+  background-color: rgb(52, 55, 68);
+}
+
+.el-menu {
+  border: none;
+  height: calc(95vh - 23px);
+  width: 100% !important;
+  padding: 47px 15px 0;
 }
 </style>

@@ -1,32 +1,14 @@
 <template>
-  <el-dialog
-    title="修改密码"
-    :visible.sync="dialogFormVisible"
-    width="568px"
-    class="pwdCon"
-    @close="handlePwdClose()"
-  >
+  <el-dialog title="修改密码" :visible.sync="dialogFormVisible" width="568px" class="pwdCon" @close="handlePwdClose()">
     <el-form ref="form" :model="form" label-width="85px" :rules="rules">
       <el-form-item label="原始密码：" prop="oldPassword">
-        <el-input
-          v-model="form.oldPassword"
-          type="password"
-          placeholder="请输入"
-        />
+        <el-input v-model="form.oldPassword" type="password" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="新密码：" prop="newPassword">
-        <el-input
-          v-model="form.newPassword"
-          type="password"
-          placeholder="6 - 20位密码，数字或字母，区分大小写"
-        />
+        <el-input v-model="form.newPassword" type="password" placeholder="6 - 20位密码，数字或字母，区分大小写" />
       </el-form-item>
       <el-form-item label="确认密码：" prop="affirmPassword">
-        <el-input
-          v-model="form.affirmPassword"
-          type="password"
-          placeholder="请输入"
-        />
+        <el-input v-model="form.affirmPassword" type="password" placeholder="请输入" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -76,7 +58,7 @@ export default class extends Vue {
   private form = {} as any
   private affirmPassword = ''
   handleSave() {
-    (this.$refs.form as ElForm).validate(async (valid: boolean) => {
+     (this.$refs.form as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         const parnt = {
           oldPassword: this.form.oldPassword,
@@ -84,14 +66,14 @@ export default class extends Vue {
         }
         await editPassword(parnt)
         this.$emit('handleclose')
-        ;(this.$refs.form as ElForm).resetFields()
+          ; (this.$refs.form as ElForm).resetFields()
       } else {
         return false
       }
     })
   }
   handlePwdClose() {
-    (this.$refs.form as ElForm).resetFields()
+     (this.$refs.form as ElForm).resetFields()
     this.$emit('handleclose')
   }
 }
@@ -103,15 +85,19 @@ export default class extends Vue {
       padding-top: 60px;
       padding: 60px 100px 0;
     }
+
     .el-input__inner {
       padding: 0 12px;
     }
+
     .el-form-item {
       margin-bottom: 26px;
     }
+
     .el-form-item__label {
       text-align: left;
     }
+
     .el-dialog__footer {
       padding-top: 14px;
     }

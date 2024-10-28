@@ -12,9 +12,9 @@ export interface IAppState {
   sidebar: {
     opened: boolean
     withoutAnimation: boolean
-
+    
   }
-  statusNumber: Number
+  statusNumber:Number
 }
 
 @Module({ 'dynamic': true, store, 'name': 'app' })

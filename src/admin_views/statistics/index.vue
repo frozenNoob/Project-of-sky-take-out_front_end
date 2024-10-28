@@ -8,7 +8,7 @@
       <TurnoverStatistics :turnoverdata="turnoverData" />
       <!-- end -->
       <!-- 用户统计 -->
-      <UserStatistics :userdata="userData" />
+      <!-- <UserStatistics :userdata="userData" /> -->
       <!-- end -->
     </div>
     <div class="homeMain homecon">
@@ -160,4 +160,4 @@ export default class extends Vue {
 }
 </script>
 
-<style></style>
+<style lang="scss"></style>

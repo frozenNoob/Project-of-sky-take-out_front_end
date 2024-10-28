@@ -37,6 +37,12 @@ const router = new Router({
       meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
     },
     {
+      path: "/user/login",
+      component: () =>
+        import(/* webpackChunkName: "login" */ "@/user_views/login/index.vue"),
+      meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
+    },
+    {
       path: "/404",
       component: () => import(/* webpackChunkName: "404" */ "@/common_views/404.vue"),
       meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
@@ -48,7 +54,8 @@ const router = new Router({
       redirect: "/admin/dashboard",
       children: [
         {
-          path: "/dashboard",
+          // 这里如果用/dashboard的话就会自动识别为从根路径开始
+          path: "dashboard", //注意，以 / 开头的嵌套路径将被视为根路径。这允许你利用组件嵌套，而不必使用嵌套的 URL
           component: () =>
             import(/* webpackChunkName: "dashboard" */ "@/admin_views/dashboard/index.vue"),
           name: "Dashboard",
@@ -59,7 +66,7 @@ const router = new Router({
           }
         },
         {
-          path: "/statistics",
+          path: "statistics",//被识别成'/statistics'，原因估计是声明先后问题吧。
           component: () =>
             import(/* webpackChunkName: "shopTable" */ "@/admin_views/statistics/index.vue"),
           meta: {
@@ -95,7 +102,7 @@ const router = new Router({
           }
         },
         {
-          path: "/dish/add",
+          path: "dish/add",
           component: () =>
             import(/* webpackChunkName: "shopTable" */ "@/admin_views/dish/addDishtype.vue"),
           meta: {
@@ -124,7 +131,7 @@ const router = new Router({
         },
 
         {
-          path: "/employee/add",
+          path: "employee/add",
           component: () =>
             import(/* webpackChunkName: "dashboard" */ "@/admin_views/employee/addEmployee.vue"),
           meta: {
@@ -134,7 +141,7 @@ const router = new Router({
         },
 
         {
-          path: "/setmeal/add",
+          path: "setmeal/add",
           component: () =>
             import(/* webpackChunkName: "shopTable" */ "@/admin_views/setmeal/addSetmeal.vue"),
           meta: {
@@ -151,20 +158,20 @@ const router = new Router({
       redirect: "/list",
       children: [
         {
-          path: "/login",
+          path: "/category",
           component: () =>
-            import(/* webpackChunkName: "login" */ "@/user_views/login/index.vue"),
+            import(/* webpackChunkName: "login" */ "@/user_views/category/index.vue"),
           meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
         },
         //////////////加入员工相关的其他功能/////////////////
       ]
     },
     // 放在最后，匹配除了上面的能匹配合法路径外的其他所有的非合法路径，重定向为404
-    // {
-    //   path: "*",
-    //   redirect: "/404",
-    //   meta: { hidden: true }
-    // },
+    {
+      path: "*",
+      redirect: "/404",
+      meta: { hidden: true }
+    },
   ]
 });
 

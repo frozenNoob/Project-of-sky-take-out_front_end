@@ -25,6 +25,10 @@
               <span v-if="!loading">登录</span>
               <span v-else>登录中...</span>
             </el-button>
+            <el-button class="exchange-btn" size="medium" type="primary" style="width: 100%"
+              @click.native.prevent="changeToUserLogin">
+                切换为用户登录
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -83,7 +87,7 @@ export default class extends Vue {
         await UserModule.Login(this.loginForm as any)
           .then((res: any) => {
             if (String(res.code) === '1') {
-              this.$router.push('/admin')//通过重定向进入工作台
+              this.$router.push('/admin') //管理员（员工）登录
             } else {
               // this.$message.error(res.msg)
               this.loading = false
@@ -97,6 +101,9 @@ export default class extends Vue {
         return false
       }
     })
+  }
+  private changeToUserLogin(){
+    this.$router.push('/user/login');
   }
 }
 </script>

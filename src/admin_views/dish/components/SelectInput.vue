@@ -1,10 +1,23 @@
 <template>
   <div class="selectInput">
-    <el-input v-model="value" type="text" style="width: 100%" placeholder="请选择口味" clearable readonly
-      @focus="selectFlavor(true)" @blur="outSelect(false)" />
+    <el-input
+      v-model="value"
+      type="text"
+      style="width: 100%"
+      placeholder="请选择口味"
+      clearable
+      readonly
+      @focus="selectFlavor(true)"
+      @blur="outSelect(false)"
+    />
     <div v-if="mak && dishFlavorsData.length" class="flavorSelect">
-      <span v-for="(it, ind) in dishFlavorsData" :key="ind" class="items" @click="checkOption(it, ind)">{{ it.name
-        }}</span>
+      <span
+        v-for="(it, ind) in dishFlavorsData"
+        :key="ind"
+        class="items"
+        @click="checkOption(it, ind)"
+        >{{ it.name }}</span
+      >
       <span v-if="dishFlavorsData == []" class="none">无数据</span>
     </div>
   </div>
@@ -52,7 +65,6 @@ export default class extends Vue {
   position: relative;
   width: 100%;
   min-width: 100px;
-
   .flavorSelect {
     position: absolute;
     width: 100%;
@@ -64,7 +76,6 @@ export default class extends Vue {
     background: #fff;
     top: 50px;
     z-index: 99;
-
     .items {
       cursor: pointer;
       display: inline-block;
@@ -73,17 +84,14 @@ export default class extends Vue {
       border-bottom: solid 1px #f4f4f4;
       color: #666;
       margin: 0 !important;
-
       &:hover {
         background-color: #fffbf0;
       }
-
       &:active {
         background-color: #fffbf0;
         color: #ffc200;
       }
     }
-
     .none {
       font-size: 14px;
     }
