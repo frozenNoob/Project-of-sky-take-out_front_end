@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <h2 class="homeTitle">
-      今日数据<i>{{ days[1] }}</i
-      ><span><router-link to="statistics">详细数据</router-link></span>
+      今日数据<i>{{ days[1] }}</i><span><router-link to="statistics">详细数据</router-link></span>
     </h2>
     <div class="overviewBox">
       <ul>

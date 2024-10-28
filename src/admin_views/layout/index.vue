@@ -1,10 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div
-      v-if="classObj.mobile && sidebar.opened"
-      class="drawer-bg"
-      @click="handleClickOutside"
-    />
+    <!-- <div v-if="classObj.mobile && sidebar.opened" class="drawer-bg" @click="handleClickOutside" /> -->
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <navbar />
@@ -21,7 +17,7 @@ import { AppMain, Navbar, Sidebar } from './components'
 import ResizeMixin from './mixin/resize'
 
 @Component({
-  name: 'Layout',
+  name: 'adminLayout',
   components: {
     AppMain,
     Navbar,
@@ -130,6 +126,7 @@ export default class extends mixins(ResizeMixin) {
 }
 
 .withoutAnimation {
+
   .main-container,
   .sidebar-container {
     transition: none;

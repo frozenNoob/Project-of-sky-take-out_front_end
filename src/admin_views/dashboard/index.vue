@@ -15,10 +15,7 @@
       <!-- end -->
     </div>
     <!-- 订单信息 -->
-    <OrderList
-      :order-statics="orderStatics"
-      @getOrderListBy3Status="getOrderListBy3Status"
-    />
+    <OrderList :order-statics="orderStatics" @getOrderListBy3Status="getOrderListBy3Status" />
     <!-- end -->
   </div>
 </template>
@@ -116,5 +113,4 @@ export default class extends Vue {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

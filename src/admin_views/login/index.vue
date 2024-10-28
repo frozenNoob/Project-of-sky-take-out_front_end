@@ -83,7 +83,7 @@ export default class extends Vue {
         await UserModule.Login(this.loginForm as any)
           .then((res: any) => {
             if (String(res.code) === '1') {
-              this.$router.push('/')
+              this.$router.push('/admin')//通过重定向进入工作台
             } else {
               // this.$message.error(res.msg)
               this.loading = false

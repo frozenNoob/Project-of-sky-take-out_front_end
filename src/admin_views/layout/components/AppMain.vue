@@ -1,5 +1,6 @@
 <template>
   <section class="app-main">
+    <!-- 过渡用的动画效果 -->
     <transition
       name="fade-transform"
       mode="out-in"
