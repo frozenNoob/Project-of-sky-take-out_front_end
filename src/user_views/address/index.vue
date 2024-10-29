@@ -2,8 +2,8 @@
 <!-- eslint-disable vue/html-indent -->
 <!-- eslint-disable vue/html-self-closing -->
 <template>
-  <div>
-    <p>首页（商品浏览）</p>
+  <div class="login">
+    <p>地址管理</p>
   </div>
 </template>
 

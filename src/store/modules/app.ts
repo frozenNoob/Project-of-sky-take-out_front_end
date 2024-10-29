@@ -12,7 +12,6 @@ export interface IAppState {
   sidebar: {
     opened: boolean
     withoutAnimation: boolean
-    
   }
   statusNumber:Number
 }

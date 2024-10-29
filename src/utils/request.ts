@@ -23,10 +23,11 @@ service.interceptors.request.use(
     // Add X-Access-Token header to every request, you can add other custom headers here
     if (UserModule.token) {
       config.headers['token'] = UserModule.token
-    } else if (UserModule.token && config.url != '/login') {
-      window.location.href = '/login'
-      return false
     }
+    // else if (UserModule.token && config.url != '/') {
+    //   window.location.href = '/'
+    //   return false
+    // }
 
     // config.headers['Access-Control-Allow-Origin'] = '*'
     // config.headers['Content-Type'] = 'application/json;'
@@ -76,7 +77,7 @@ service.interceptors.response.use(
   (response: any) => {
     // console.log(response, 'response')
     if (response.data.status === 401) {
-      router.push('/login')
+      router.push('/')
       // const res = response.data
       // return response
     }
@@ -105,7 +106,7 @@ service.interceptors.response.use(
     if (error && error.response) {
       switch (error.response.status) {
         case 401:
-          router.push('/login')
+          router.push('/')
           break;
         case 405:
           error.message = '请求错误'

@@ -1,77 +1,28 @@
 <template>
   <div class="navbar">
     <div class="statusBox">
-      <!-- <hamburger id="hamburger-container"
-                 :is-active="sidebar.opened"
-                 class="hamburger-container"
-                 @toggleClick="toggleSideBar" /> -->
-      <span v-if="status===1"
-            class="businessBtn">营业中</span>
-      <span v-else
-            class="businessBtn closing">打烊中</span>
+      <span v-if="status === 1" class="businessBtn">营业中</span>
+      <span v-else class="businessBtn closing">打烊中</span>
     </div>
 
-    <div :key="restKey"
-         class="right-menu">
-      <div class="rightStatus">
-        <audio ref="audioVo"
-               hidden>
-          <source src="./../../../../assets/preview.mp3" type="audio/mp3" />
-        </audio>
-        <audio ref="audioVo2"
-               hidden>
-          <source src="./../../../../assets/reminder.mp3" type="audio/mp3" />
-        </audio>
-        <span class="navicon operatingState" @click="handleStatus"><i />营业状态设置</span>
-      </div>
+    <div :key="restKey" class="right-menu">
       <div class="avatar-wrapper">
-        <div :class="shopShow?'userInfo':''"
-             @mouseenter="toggleShow"
-             @mouseleave="mouseLeaves">
-          <el-button type="primary"
-                     :class="shopShow?'active':''">
-            {{ name }}<i class="el-icon-arrow-down" />
+        <div :class="shopShow ? 'userInfo' : ''" @mouseenter="toggleShow" @mouseleave="mouseLeaves">
+          <el-button type="primary" :class="shopShow ? 'active' : ''">
+            用户<i class="el-icon-arrow-down" />
           </el-button>
-          <div v-if="shopShow"
-               class="userList">
-            <p class="amendPwdIcon"
-               @click="handlePwd">
-              修改密码<i />
-            </p>
-            <p class="outLogin"
-               @click="logout">
+          <div v-if="shopShow" class="userList">
+            <p class="outLogin" @click="logout">
               退出登录<i />
             </p>
           </div>
         </div>
       </div>
     </div>
-    <!-- 营业状态弹层 -->
-    <el-dialog title="营业状态设置"
-               :visible.sync="dialogVisible"
-               width="25%"
-               :show-close="false">
-      <el-radio-group v-model="setStatus">
-        <el-radio :label="1">
-          营业中
-          <span>当前餐厅处于营业状态，自动接收任何订单，可点击打烊进入店铺打烊状态。</span>
-        </el-radio>
-        <el-radio :label="0">
-          打烊中
-          <span>当前餐厅处于打烊状态，仅接受营业时间内的预定订单，可点击营业中手动恢复营业状态。</span>
-        </el-radio>
-      </el-radio-group>
-      <span slot="footer"
-            class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary"
-                   @click="handleSave">确 定</el-button>
-      </span>
-    </el-dialog>
     <!-- end -->
     <!-- 修改密码 -->
-    <Password :dialog-form-visible="dialogFormVisible"
-              @handleclose="handlePwdClose" />
+    <!-- <Password :dialog-form-visible="dialogFormVisible"
+              @handleclose="handlePwdClose" /> -->
     <!-- end -->
   </div>
 </template>
@@ -215,11 +166,10 @@ export default class extends Vue {
             }, 100)
           },
           // 这里也可以把返回信息加入到message中显示
-          message: `${
-            jsonMsg.type === 1
+          message: `${jsonMsg.type === 1
               ? `<span>您有1个<span style=color:#419EFF>订单待处理</span>,${jsonMsg.content},请及时接单</span>`
               : `${jsonMsg.content}<span style='color:#419EFF;cursor: pointer'>去处理</span>`
-          }`,
+            }`,
         })
       }
       // 监听socket错误
@@ -317,6 +267,7 @@ export default class extends Vue {
     align-items: center;
     display: flex;
   }
+
   .hamburger-container {
     // line-height: 54px;
 
@@ -333,6 +284,7 @@ export default class extends Vue {
   .breadcrumb-container {
     float: left;
   }
+
   .right-menu {
     float: right;
 
@@ -346,10 +298,12 @@ export default class extends Vue {
       width: 130px;
       display: inline-block;
       cursor: pointer;
+
       &:hover {
         background: rgba(255, 255, 255, 0.52);
       }
     }
+
     .amendPwdIcon {
       i {
         width: 18px;
@@ -359,16 +313,17 @@ export default class extends Vue {
         margin-top: 8px;
       }
     }
+
     .outLogin {
       i {
         width: 18px;
         height: 18px;
-        background: url(./../../../../assets/icons/btn_close@2x.png) no-repeat 100%
-          100%;
+        background: url(./../../../../assets/icons/btn_close@2x.png) no-repeat 100% 100%;
         background-size: contain;
         margin-top: 8px;
       }
     }
+
     .outLogin {
       cursor: pointer;
     }
@@ -400,6 +355,7 @@ export default class extends Vue {
 
     // }
   }
+
   .rightStatus {
     height: 100%;
     line-height: 60px;
@@ -407,6 +363,7 @@ export default class extends Vue {
     align-items: center;
     float: left;
   }
+
   .avatar-wrapper {
     margin-top: 14px;
     margin-left: 18px;
@@ -415,6 +372,7 @@ export default class extends Vue {
     float: right;
     width: 120px;
     text-align: left;
+
     .user-avatar {
       cursor: pointer;
       width: 40px;
@@ -445,15 +403,18 @@ export default class extends Vue {
       border: 0 none;
       height: 32px;
       line-height: 32px;
+
       &.active {
         background: rgba(250, 250, 250, 0);
         border: 0 none;
+
         .el-icon-arrow-down {
           transform: rotate(-180deg);
         }
       }
     }
   }
+
   .businessBtn {
     height: 22px;
     line-height: 20px;
@@ -464,9 +425,11 @@ export default class extends Vue {
     padding: 0 6px;
     color: #fff;
   }
+
   .closing {
     background: #6a6a6a;
   }
+
   .navicon {
     i {
       display: inline-block;
@@ -476,18 +439,21 @@ export default class extends Vue {
       margin: 0 4px 0 0;
     }
   }
+
   .operatingState {
     i {
       background: url('./../../../../assets/icons/time.png') no-repeat;
       background-size: contain;
     }
   }
+
   .mesCenter {
     i {
       background: url('./../../../../assets/icons/msg.png') no-repeat;
       background-size: contain;
     }
   }
+
   // .el-badge__content.is-fixed {
   //   top: 20px;
   //   right: 6px;
@@ -498,18 +464,22 @@ export default class extends Vue {
 .el-notification {
   // background: rgba(255, 255, 255, 0.71);
   width: 419px !important;
+
   .el-notification__title {
     margin-bottom: 14px;
     color: #333;
+
     .el-notification__content {
       color: #333;
     }
   }
 }
+
 .navbar {
   .el-dialog {
     min-width: auto !important;
   }
+
   .el-dialog__header {
     height: 61px;
     line-height: 60px;
@@ -519,16 +489,20 @@ export default class extends Vue {
     color: #333;
     border: 0 none;
   }
+
   .el-dialog__body {
     padding: 10px 30px 30px;
+
     .el-radio,
     .el-radio__input {
       white-space: normal;
     }
+
     .el-radio__label {
       padding-left: 5px;
       color: #333;
       font-weight: 700;
+
       span {
         display: block;
         line-height: 20px;
@@ -537,16 +511,19 @@ export default class extends Vue {
         font-weight: normal;
       }
     }
+
     .el-radio__input.is-checked .el-radio__inner {
       &::after {
         background: #333;
       }
     }
+
     .el-radio-group {
-      & > .is-checked {
+      &>.is-checked {
         border: 1px solid #ffc200;
       }
     }
+
     .el-radio {
       width: 100%;
       background: #fbfbfa;
@@ -555,11 +532,12 @@ export default class extends Vue {
       padding: 14px 22px;
       margin-top: 20px;
     }
-    .el-radio__input.is-checked + .el-radio__label {
-      span {
-      }
+
+    .el-radio__input.is-checked+.el-radio__label {
+      span {}
     }
   }
+
   .el-badge__content.is-fixed {
     top: 24px;
     right: 2px;
@@ -571,6 +549,7 @@ export default class extends Vue {
     border-radius: 50%;
     padding: 0;
   }
+
   .badgeW {
     .el-badge__content.is-fixed {
       width: 30px;
@@ -578,6 +557,7 @@ export default class extends Vue {
     }
   }
 }
+
 .el-icon-arrow-down {
   background: url('./../../../../assets/icons/up.png') no-repeat 50% 50%;
   background-size: contain;
@@ -588,6 +568,7 @@ export default class extends Vue {
   position: absolute;
   right: 16px;
   top: 12px;
+
   &:before {
     content: '';
   }
@@ -605,6 +586,7 @@ export default class extends Vue {
   line-height: 32px;
   padding: 0 0 5px;
   height: 105px;
+
   // .active {
   //   top: 0;
   //   left: 0;
@@ -616,11 +598,13 @@ export default class extends Vue {
     // top: 35px;
     padding-left: 5px;
   }
+
   p {
     cursor: pointer;
     height: 32px;
     line-height: 32px;
     padding: 0 5px 0 7px;
+
     i {
       margin-left: 10px;
 
@@ -628,15 +612,18 @@ export default class extends Vue {
       margin-top: 4px;
       float: right;
     }
+
     &:hover {
       background: #f6f1e1;
     }
   }
 }
+
 .msgTip {
   color: #419eff;
   padding: 0 5px;
 }
+
 // .el-dropdown{
 //   .el-button--primary{
 //     height: 32px;
@@ -654,5 +641,4 @@ export default class extends Vue {
 // }
 // .el-popper[x-placement^=bottom] .popper__arrow::after,.popper__arrow{
 //   display: none !important;
-// }
-</style>
+// }</style>

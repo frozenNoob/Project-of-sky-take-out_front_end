@@ -27,7 +27,7 @@
             </el-button>
             <el-button class="exchange-btn" size="medium" type="primary" style="width: 100%"
               @click.native.prevent="changeToEmployeeLogin">
-                切换为员工登录
+              切换为员工登录
             </el-button>
           </el-form-item>
         </el-form>
@@ -42,6 +42,8 @@ import { Route } from 'vue-router'
 import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 import { isValidUsername } from '@/utils/validate'
+import { login } from '@/api/employee'
+import axios from 'axios'
 
 @Component({
   name: 'Login',
@@ -84,25 +86,28 @@ export default class extends Vue {
     (this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         this.loading = true
-        await UserModule.Login(this.loginForm as any)
-          .then((res: any) => {
-            if (String(res.code) === '1') {
-              this.$router.push('/user') //管理员（员工）登录
-            } else {
-              // this.$message.error(res.msg)
-              this.loading = false
+        // 默认情况下，Axios会将Content-Type设置为application/json,这里手动展示一下
+        await axios.post('http://localhost:8080/user/user/login', this.loginForm , {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            if(String(response.data.code == '1')){
+              console.log('POST 请求成功', response.data);
+              this.$router.push('/user') //登录成功，重定向到用户起始界面
             }
           })
-          .catch(() => {
-            // this.$message.error('用户名或密码错误！')
+          .catch(error => {
+            console.error('POST 请求失败', error);
             this.loading = false
-          })
+          });
       } else {
         return false
       }
     })
   }
-  private changeToEmployeeLogin(){
+  private changeToEmployeeLogin() {
     this.$router.push('/admin/login');
   }
 }

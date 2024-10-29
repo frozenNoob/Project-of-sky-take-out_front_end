@@ -1,15 +1,18 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <!-- <div
-      v-if="classObj.mobile && sidebar.opened"
-      class="drawer-bg"
-      @click="handleClickOutside"
-    /> -->
+    <div v-if="classObj.mobile && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
     <div class="main-container">
       <navbar />
       <app-main />
     </div>
+    <!-- 一三不容二虎啊，这2种（利用SCSS{Sassy CSS是 CSS 的一种扩展语法}，利用element-ui)只能选择其一 -->
+    <!-- <el-container>
+      <el-aside>
+        <p>这是element-ui的测试</p>
+        <sidebar />
+      </el-aside>
+    </el-container> -->
   </div>
 </template>
 
@@ -21,7 +24,7 @@ import { AppMain, Navbar, Sidebar } from './components'
 import ResizeMixin from './mixin/resize'
 
 @Component({
-  name: 'adminLayout',
+  name: 'userLayout',
   components: {
     AppMain,
     Navbar,
@@ -130,6 +133,7 @@ export default class extends mixins(ResizeMixin) {
 }
 
 .withoutAnimation {
+
   .main-container,
   .sidebar-container {
     transition: none;

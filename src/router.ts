@@ -2,6 +2,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import adminLayout from "@/admin_views/layout/index.vue";
+import userLayout from "@/user_views/layout/index.vue"
 import {
   getToken,
   setToken,
@@ -151,19 +152,30 @@ const router = new Router({
         }
       ]
     },
-    //用户的登录功能和后台功能
+    //用户的后台功能
     {
       path: "/user",
-      // component: Layout,
-      redirect: "/list",
+      component: userLayout,
+      redirect: "/user/category",
       children: [
         {
-          path: "/category",
+          path: "category",
           component: () =>
-            import(/* webpackChunkName: "login" */ "@/user_views/category/index.vue"),
-          meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
+            import(/*首页商品浏览*/ "@/user_views/category/index.vue"),
+          meta: { title: "苍穹外卖首页" }
         },
-        //////////////加入员工相关的其他功能/////////////////
+        {
+          path: "address",
+          component: () =>
+            import("@/user_views/address/index.vue"),
+          meta: { title: "地址管理" }
+        },
+        {
+          path: "orderDetail",
+          component: () =>
+            import("@/user_views/orderDetail/index.vue"),
+          meta: { title: "历史订单查询" }
+        },
       ]
     },
     // 放在最后，匹配除了上面的能匹配合法路径外的其他所有的非合法路径，重定向为404
