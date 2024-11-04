@@ -220,9 +220,9 @@ export default class extends Vue {
   // 添加
   private addDishtype(st: string) {
     if (st === 'add') {
-      this.$router.push({ path: '/dish/add' })
+      this.$router.push({ path: '/admin/dish/add' })
     } else {
-      this.$router.push({ path: '/dish/add', query: { id: st } })
+      this.$router.push({ path: '/admin/dish/add', query: { id: st } })
     }
   }
 

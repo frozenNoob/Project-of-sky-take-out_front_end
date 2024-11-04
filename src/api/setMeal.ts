@@ -63,6 +63,7 @@ export const dishCategoryList = (params: any) => {
   return request({
     url: `/category/list`,
     method: 'get',
+    // 浅拷贝！！
     params: { ...params }
   })
 }
