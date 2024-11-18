@@ -29,11 +29,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
-import { AppModule } from '@/store/modules/app'
-import { UserModule } from '@/store/modules/user'
+// import { AppModule } from '@/store/modules/app'
 import Breadcrumb from '@/components/Breadcrumb/index.vue'
 import Hamburger from '@/components/Hamburger/index.vue'
-import { getStatus, setStatus } from '@/api/users'
+import { getStatus } from '@/api/user/user'
 import Cookies from 'js-cookie'
 import { debounce, throttle } from '@/utils/common'
 import { setNewData, getNewData } from '@/utils/cookies'
@@ -52,7 +51,6 @@ import Password from '../components/password.vue'
   },
 })
 export default class extends Vue {
-  private storeId = this.getStoreId
   private restKey: number = 0
   private websocket = null
   private newOrder = ''
@@ -60,7 +58,7 @@ export default class extends Vue {
   private audioIsPlaying = false
   private audioPaused = false
   private statusValue = true
-  private audioUrl: './../../../../assets/preview.mp3'
+
   private shopShow = false
   private dialogVisible = false
   private status = 1
@@ -70,146 +68,15 @@ export default class extends Vue {
   // get ountUnread() {
   //   return Number(getNewData())
   // }
-  get sidebar() {
-    return AppModule.sidebar
-  }
-
-  get device() {
-    return AppModule.device.toString()
-  }
-
-  getuserInfo() {
-    return UserModule.userInfo
-  }
-
-  get name() {
-    return (UserModule.userInfo as any).name
-      ? (UserModule.userInfo as any).name
-      : JSON.parse(Cookies.get('user_info') as any).name
-  }
-
-  get getStoreId() {
-    let storeId = ''
-    if (UserModule.storeId) {
-      storeId = UserModule.storeId
-    } else if ((UserModule.userInfo as any).stores != null) {
-      storeId = (UserModule.userInfo as any).stores[0].storeId
-    }
-    return storeId
-  }
-  mounted() {
-    document.addEventListener('click', this.handleClose)
-    //console.log(this.$store.state.app.statusNumber)
-    // const msg = {
-    //   data: {
-    //     type: 2,
-    //     content: '订单1653904906519客户催单，已下单23分钟，仍未接单。',
-    //     details: '434'
-    //   }
-    // }
-    this.getStatus()
-  }
-  created() {
-    this.webSocket()
-  }
   onload() {
   }
   destroyed() {
     this.websocket.close() //离开路由之后断开websocket连接
   }
-
-  // 添加新订单提示弹窗
-  webSocket() {
-    const that = this as any
-    let clientId = Math.random().toString(36).substr(2)
-    let socketUrl = process.env.VUE_APP_SOCKET_URL + clientId
-    console.log(socketUrl, 'socketUrl')
-    if (typeof WebSocket == 'undefined') {
-      that.$notify({
-        title: '提示',
-        message: '当前浏览器无法接收实时报警信息，请使用谷歌浏览器！',
-        type: 'warning',
-        duration: 0,
-      })
-    } else {
-      this.websocket = new WebSocket(socketUrl)
-      // 监听socket打开
-      this.websocket.onopen = function () {
-        console.log('浏览器WebSocket已打开')
-      }
-      // 监听socket消息接收
-      this.websocket.onmessage = function (msg) {
-        // 转换为json对象
-        that.$refs.audioVo.currentTime = 0
-        that.$refs.audioVo2.currentTime = 0
-
-        console.log(msg, JSON.parse(msg.data), 'msg')
-        // const h = this.$createElement
-        const jsonMsg = JSON.parse(msg.data)
-        if (jsonMsg.type === 1) {
-          that.$refs.audioVo.play()
-        } else if (jsonMsg.type === 2) {
-          that.$refs.audioVo2.play()
-        }
-        that.$notify({
-          title: jsonMsg.type === 1 ? '待接单' : '催单',
-          duration: 0,
-          dangerouslyUseHTMLString: true,
-          onClick: () => {
-            that.$router
-              .push(`/order?orderId=${jsonMsg.orderId}`)
-              .catch((err) => {
-                console.log(err)
-              })
-            setTimeout(() => {
-              location.reload()
-            }, 100)
-          },
-          // 这里也可以把返回信息加入到message中显示
-          message: `${jsonMsg.type === 1
-              ? `<span>您有1个<span style=color:#419EFF>订单待处理</span>,${jsonMsg.content},请及时接单</span>`
-              : `${jsonMsg.content}<span style='color:#419EFF;cursor: pointer'>去处理</span>`
-            }`,
-        })
-      }
-      // 监听socket错误
-      this.websocket.onerror = function () {
-        that.$notify({
-          title: '错误',
-          message: '服务器错误，无法接收实时报警信息',
-          type: 'error',
-          duration: 0,
-        })
-      }
-      // 监听socket关闭
-      this.websocket.onclose = function () {
-        console.log('WebSocket已关闭')
-      }
-    }
-  }
-
-  private toggleSideBar() {
-    AppModule.ToggleSideBar(false)
-  }
   // 退出
   private async logout() {
-    this.$store.dispatch('LogOut').then(() => {
-      // location.href = '/'
-      this.$router.replace({ path: '/' })
-    })
-    // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-  }
-  // 获取未读消息
-  async getCountUnread() {
-    const { data } = await getCountUnread()
-    if (data.code === 1) {
-      // this.ountUnread = data.data
-      AppModule.StatusNumber(data.data)
-      // setNewData(data.data)
-      // this.$message.success('操作成功！')
-    } else {
-      this.$message.error(data.msg)
-    }
+    this.$router.push('/');//回到登录页面
+    localStorage.clear();//清除已有的token
   }
   // 营业状态
   async getStatus() {
@@ -217,31 +84,7 @@ export default class extends Vue {
     this.status = data.data
     this.setStatus = this.status
   }
-  // 下拉菜单显示
-  toggleShow() {
-    this.shopShow = true
-  }
-  // 下拉菜单隐藏
-  mouseLeaves() {
-    this.shopShow = false
-  }
-  // 触发空白处下来菜单关闭
-  handleClose() {
-    // clearTimeout(this.leave)
-    // this.shopShow = false
-  }
-  // 设置营业状态
-  handleStatus() {
-    this.dialogVisible = true
-  }
-  // 营业状态设置
-  async handleSave() {
-    const { data } = await setStatus(this.setStatus)
-    if (data.code === 1) {
-      this.dialogVisible = false
-      this.getStatus()
-    }
-  }
+
   // 修改密码
   handlePwd() {
     this.dialogFormVisible = true

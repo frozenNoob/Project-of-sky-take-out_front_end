@@ -20,6 +20,7 @@
   </div>
 </template>
 
+<!-- 这里必须使用ts语言，不然src/router.ts文件不能正常导入vue中的模块！！ -->
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import {

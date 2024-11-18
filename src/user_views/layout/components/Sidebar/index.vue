@@ -43,65 +43,57 @@ import variables from '@/styles/_variables.scss'
 import { getSidebarStatus, setSidebarStatus } from '@/utils/cookies'
 import Cookies from 'js-cookie'
 @Component({
-  name: 'SideBar',
-  components: {
-    SidebarItem
-  }
+  name: 'SideBar'
 })
 export default class extends Vue {
   private restKey: number = 0
-  get name() {
-    return (UserModule.userInfo as any).name
-      ? (UserModule.userInfo as any).name
-      : JSON.parse(Cookies.get('user_info') as any).name
-  }
-  get defOpen() {
-    // const urlArr = this.$route.path.split('/')
-    // const openStr = urlArr.length > 2 ? `/${urlArr[1]}` : '/'
-    let path = ['/']
-    this.routes.forEach((n: any, i: number) => {
-      if (n.meta.roles && n.meta.roles[0] === this.roles[0]) {
-        path.splice(0, 1, n.path)
-      }
-    })
-    return path
-  }
+  // get defOpen() {
+  //   // const urlArr = this.$route.path.split('/')
+  //   // const openStr = urlArr.length > 2 ? `/${urlArr[1]}` : '/'
+  //   let path = ['/']
+  //   this.routes.forEach((n: any, i: number) => {
+  //     if (n.meta.roles && n.meta.roles[0] === this.roles[0]) {
+  //       path.splice(0, 1, n.path) //在这里替换了路径,加入了管理员身份判定/////////////////////////////////
+  //     }
+  //   })
+  //   return path
+  // }
 
-  get defAct() {
-    let path = this.$route.path
-    return path
-  }
+  // get defAct() {
+  //   let path = this.$route.path
+  //   return path
+  // }
 
-  get sidebar() {
-    return AppModule.sidebar
-  }
+  // get sidebar() {
+  //   return AppModule.sidebar
+  // }
 
-  get roles() {
-    return UserModule.roles
-  }
+  // get roles() {
+  //   return UserModule.roles
+  // }
 
-  get routes() {
-    let routes = JSON.parse(
-      JSON.stringify([...(this.$router as any).options.routes])
-    )
-    console.log('-=-=routes=-=-=', routes)
-    console.log('-=-=routes=-=-=', this.roles[0])
-    let menuList = []
-    let menu = routes.find(item => item.path === '/')
-    if (menu) {
-      menuList = menu.children
-    }
-    console.log('-=-=routes=-wwww=-=', routes)
-    return menuList
-  }
+  // get routes() {
+  //   let routes = JSON.parse(
+  //     JSON.stringify([...(this.$router as any).options.routes])
+  //   )
+  //   console.log('-=-=routes=-=-=', routes)
+  //   console.log('-=-=routes=-=-=', this.roles[0])
+  //   let menuList = []
+  //   let menu = routes.find(item => item.path === '/')
+  //   if (menu) {
+  //     menuList = menu.children
+  //   }
+  //   console.log('-=-=routes=-wwww=-=', routes)
+  //   return menuList
+  // }
 
   get variables() {
     return variables
   }
 
-  get isCollapse() {
-    return !this.sidebar.opened
-  }
+  // get isCollapse() {
+  //   return !this.sidebar.opened
+  // }
   // private async logout() {
   //   this.$store.dispatch('LogOut').then(() => {
   //     // location.href = '/'

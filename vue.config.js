@@ -17,26 +17,30 @@ module.exports = {
       ]
     }
   },
-  // 开启代理
+  // 开启代理，映射到后端的接口
   devServer: {
-    host:'0.0.0.0',
-    public: '0.0.0.0:8888', // 本地的ip:端口号
+    host: '0.0.0.0',
     port: 8888,
+    // public: '0.0.0.0:8888', // 本地的ip:端口号，相当于上2句，可省略
     open: true,
-    disableHostCheck:true,
-    hot:true,//自动保存
+    disableHostCheck: true,
+    hot: true,//自动保存
     overlay: {
       warnings: false,
       errors: true
     },
+    // 设置代理，由此隐藏后端接口，也能借此处理跨域问题（在前端和后端中选择其一处理即可）。
     proxy: {
       '/api': {
-        target: process.env.VUE_APP_URL,
+        target: process.env.VUE_APP_URL, //在根目录的.env.development文件下设置后端服务地址
         ws: false,
-        secure: false,
-        changeOrigin: true,
-        pathRewrite:{
-          '^/api':''
+        secure: false,//非https
+        changeOrigin: true,//设置此来解决前后端跨域问题，如果后端已经设置了，那么前端就不用设置！
+        // 表示请求接口时去掉api
+        //pathRewrite: {'^/api': '/'} 重写之后url为 http://0.0.0.0:/xxxx
+        // '^/api'表示匹配到以/api开头的请求路径
+        pathRewrite: {
+          '^/api': ''
         }
       }
     }
@@ -58,5 +62,5 @@ module.exports = {
     },
     // 启用 CSS modules for all css / pre-processor files.
     modules: false,
-},
+  },
 };

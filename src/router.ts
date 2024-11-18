@@ -43,11 +43,11 @@ const router = new Router({
         import(/* webpackChunkName: "login" */ "@/user_views/login/index.vue"),
       meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
     },
-    {
-      path: "/404",
-      component: () => import(/* webpackChunkName: "404" */ "@/common_views/404.vue"),
-      meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
-    },
+    // {
+    //   path: "/404",
+    //   component: () => import(/* webpackChunkName: "404" */ "@/common_views/404.vue"),
+    //   meta: { title: "苍穹外卖", hidden: true, notNeedAuth: true }
+    // },
     //员工的后台功能
     {
       path: "/admin",
@@ -67,7 +67,7 @@ const router = new Router({
           }
         },
         {
-          path: "statistics",//被识别成'/statistics'，原因估计是声明先后问题吧。
+          path: "statistics",//
           component: () =>
             import(/* webpackChunkName: "shopTable" */ "@/admin_views/statistics/index.vue"),
           meta: {
@@ -179,11 +179,11 @@ const router = new Router({
       ]
     },
     // 放在最后，匹配除了上面的能匹配合法路径外的其他所有的非合法路径，重定向为404
-    {
-      path: "*",
-      redirect: "/404",
-      meta: { hidden: true }
-    },
+    // {
+    //   path: "*",
+    //   redirect: "/404",
+    //   meta: { hidden: true }
+    // },
   ]
 });
 

@@ -9,14 +9,13 @@
 
 <!-- 这里必须使用ts语言，不然src/router.ts文件不能正常导入vue中的模块！！ -->
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { Route } from 'vue-router'
-import { Form as ElForm, Input } from 'element-ui'
-import axios from 'axios'
+import { Vue } from 'vue-property-decorator'
+// import { Route } from 'vue-router'
+// import { Form as ElForm, Input } from 'element-ui'
+// import axios from 'axios'
 
 export default class extends Vue {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

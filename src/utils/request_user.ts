@@ -1,6 +1,6 @@
 import axios, { AxiosAdapter } from 'axios'
 import { Message, MessageBox } from 'element-ui'
-import { UserModule } from '@/store/modules/user' //这里是管理员的模块
+
 import {
   getRequestKey,
   pending,
@@ -11,7 +11,9 @@ import router from '@/router'
 const CancelToken = axios.CancelToken;
 
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
+  //这里 process.env.VUE_APP_BASE_API = http://localhost:8888/api,
+  // 即'前端IP/api'
+  baseURL: 'http://localhost:8080' + '/user',
   'timeout': 600000
 })
 
@@ -21,10 +23,13 @@ service.interceptors.request.use(
     // console.log(config, 'config')
     // config.data = config.params
     // Add X-Access-Token header to every request, you can add other custom headers here
-    if (UserModule.token) {
-      config.headers['token'] = UserModule.token
+    let token = localStorage.getItem('token')
+    if (token) {
+      config.headers['token'] = token
+    } else {
+      console.log('用户端未找到token');
     }
-    // else if (UserModule.token && config.url != '/') {
+    // else if (token && config.url != '/') {
     //   window.location.href = '/'
     //   return false
     // }
@@ -49,7 +54,7 @@ service.interceptors.request.use(
           }
         }
       }
-      url = url.slice(0, -1);
+      url = url.slice(0, -1);//去掉最后一个多余的'&'
       config.params = {};
       config.url = url;
     }
