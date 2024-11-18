@@ -8,6 +8,7 @@ import {
   removePending
 } from './requestOptimize'
 import router from '@/router'
+//这个是用于当进行一次未完成的请求（还没得到响应）时，取消同样的请求，避免多次点击浪费资源。
 const CancelToken = axios.CancelToken;
 
 const service = axios.create({
@@ -58,18 +59,18 @@ service.interceptors.request.use(
       config.params = {};
       config.url = url;
     }
-    // 计算当前请求key值
-    const key = getRequestKey(config);
-    // console.log(pending,key,checkPending(key),'checkPending(key)')
-    if (checkPending(key)) {
-      // 重复请求则取消当前请求
-      const source = CancelToken.source();
-      config.cancelToken = source.token;
-      source.cancel('重复请求');
-    } else {
-      // 加入请求字典
-      pending[key] = true;
-    }
+    // // 计算当前请求key值
+    // const key = getRequestKey(config);
+    // // console.log(pending,key,checkPending(key),'checkPending(key)')
+    // if (checkPending(key)) {
+    //   // 重复请求则取消当前请求
+    //   const source = CancelToken.source();
+    //   config.cancelToken = source.token;
+    //   source.cancel('这是一次重复请求');
+    // } else {
+    //   // 加入请求字典
+    //   pending[key] = true;
+    // }
     return config
   },
   (error: any) => {
@@ -86,23 +87,20 @@ service.interceptors.response.use(
       // const res = response.data
       // return response
     }
-    //请求响应中的config的url会带上代理的api需要去掉
-    response.config.url = response.config.url.replace('/api', '')
     // 请求完成，删除请求中状态
-    const key = getRequestKey(response.config);
-    removePending(key);
-    // if (response.data.code === 0) {
-    //   Message.error(response.data.msg)
-    //   // if(response.data.msg === 'NOTLOGIN' || response.data.msg === '未登录'){
-    //   //   router.push('/login')
-    //   // }
-    //   // return window.location.href = '/login'
-    //   // window.location.href = '/login'
-    //   // return false
-    // } else
-    if (response.data.code === 1) {
+    // const key = getRequestKey(response.config);
+    // removePending(key);
+    if (response.data.code === 0) {
+      Message.error(response.data.msg)
+      if(response.data.msg === 'NOTLOGIN' || response.data.msg === '未登录'){
+        router.push('/')
+      }
+    } else if (response.data.code === 1) {
       // const res = response.data
       return response
+    } else {
+      Message.error('响应的自定义码错误');
+      // console.info('响应的自定义码错误');
     }
     return response
   },
@@ -117,18 +115,17 @@ service.interceptors.response.use(
           error.message = '请求错误'
       }
     }
-    //请求响应中的config的url会带上代理的api需要去掉
-    error.config.url = error.config.url.replace('/api', '')
+
     // 请求完成，删除请求中状态
-    const key = getRequestKey(error.config);
-    removePending(key);
-    // console.log(error, pending, 'error11')
-    // Message({
-    //   'message': error.message,
-    //   'type': 'error',
-    //   'duration': 5 * 1000
-    // })
-    // router.push('/login')
+    // const key = getRequestKey(error.config);
+    // removePending(key);
+    console.log(error, pending, 'error11')
+    Message({
+      'message': error.message,
+      'type': 'error',
+      'duration': 5 * 1000
+    })
+    router.push('/')
     return Promise.reject(error)
   }
 )

@@ -19,9 +19,9 @@ module.exports = {
   },
   // 开启代理，映射到后端的接口
   devServer: {
-    host: '0.0.0.0',
+    host: 'localhost',//本地的
     port: 8888,
-    // public: '0.0.0.0:8888', // 本地的ip:端口号，相当于上2句，可省略
+    // public: '192.168.91.1:8888', //Network的ip:端口号，这里是私网
     open: true,
     disableHostCheck: true,
     hot: true,//自动保存
@@ -37,7 +37,6 @@ module.exports = {
         secure: false,//非https
         changeOrigin: true,//设置此来解决前后端跨域问题，如果后端已经设置了，那么前端就不用设置！
         // 表示请求接口时去掉api
-        //pathRewrite: {'^/api': '/'} 重写之后url为 http://0.0.0.0:/xxxx
         // '^/api'表示匹配到以/api开头的请求路径
         pathRewrite: {
           '^/api': ''

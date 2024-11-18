@@ -15,7 +15,7 @@ const getRequestKey = (config) => {
 // 存储key值
 const pending = {};
 // 检查key值
-const checkPending = (key) => !!pending[key];
+const checkPending = (key) => !!pending[key];//2次!!转成布尔运算，对象不为空对应true
 // 删除key值
 const removePending = (key) => {
     // console.log(key,'key')
