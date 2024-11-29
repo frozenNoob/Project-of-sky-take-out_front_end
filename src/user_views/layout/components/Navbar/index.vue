@@ -73,6 +73,19 @@ export default class extends Vue {
   destroyed() {
     this.websocket.close() //离开路由之后断开websocket连接
   }
+  // 下拉菜单显示
+  toggleShow() {
+    this.shopShow = true
+  }
+  // 下拉菜单隐藏
+  mouseLeaves() {
+    this.shopShow = false
+  }
+  // 触发空白处下来菜单关闭
+  handleClose() {
+    // clearTimeout(this.leave)
+    // this.shopShow = false
+  }
   // 退出
   private async logout() {
     this.$router.push('/');//回到登录页面

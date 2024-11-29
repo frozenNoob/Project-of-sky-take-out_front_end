@@ -372,10 +372,10 @@ export default class extends Vue {
       console.log(valid, 'valid')
       if (valid) {
         if (!this.ruleForm.image) return this.$message.error('菜品图片不能为空')
-        let params: any = { ...this.ruleForm }
+        let params: any = { ...this.ruleForm } //浅拷贝操作
         // params.flavors = this.dishFlavors
         params.status =
-          this.actionType === 'add' ? 0 : this.ruleForm.status ? 1 : 0
+          this.actionType === 'add' ? 1 : this.ruleForm.status ? 1 : 0
         // params.price *= 100
         params.categoryId = this.ruleForm.categoryId
         params.flavors = this.dishFlavors.map(obj => ({

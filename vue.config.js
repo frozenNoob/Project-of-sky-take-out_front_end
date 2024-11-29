@@ -19,12 +19,20 @@ module.exports = {
   },
   // 开启代理，映射到后端的接口
   devServer: {
-    host: 'localhost',//本地的
-    port: 8888,
-    // public: '192.168.91.1:8888', //Network的ip:端口号，这里是私网
-    open: true,
+    // host和port是指定能够监听，必须包括public,不然会无法访问！！!!!!!!
+    // '0.0.0.0'表示将devServer监听所有可用的网络接口，即可以通过所有网络接口进行访问，
+    // 而不仅限于localhost或127.0.0.1或10.253.1.216
+    // host: '0.0.0.0',//表示监听10.253.1.216，这样才能通过这个IP来交流
+    port: 8888,// port是空闲端口，不配置时默认为8080
+    // // // public是指定我的本地IP
+    // public: '10.253.1.216:8888', //本地的ip:端口号，外部可以访问的IP地址，这里是私网IP，在
+    open: true,//打开默认浏览器
+    // HTTP请求中，可以通过Host header来指定请求的IP地址或域名
+    // 当设置为true时，webpack-dev-server将不再检查访问它的主机的host header，并允许任何host（主机）访问。
     disableHostCheck: true,
-    hot: true,//自动保存
+    //设置为true时，当代码发生变化时，webpack-dev-server会在不刷新整个页面的情况下，实时地将变化的模块替换到已经运行的应用中，实现实时预览效果，提高开发效率。
+    hot: true,
+    // 是否被覆盖
     overlay: {
       warnings: false,
       errors: true
@@ -32,12 +40,13 @@ module.exports = {
     // 设置代理，由此隐藏后端接口，也能借此处理跨域问题（在前端和后端中选择其一处理即可）。
     proxy: {
       '/api': {
+        // 这里VUE_APP_URL = 'http://localhost:8080/admin'
         target: process.env.VUE_APP_URL, //在根目录的.env.development文件下设置后端服务地址
         ws: false,
         secure: false,//非https
         changeOrigin: true,//设置此来解决前后端跨域问题，如果后端已经设置了，那么前端就不用设置！
-        // 表示请求接口时去掉api
         // '^/api'表示匹配到以/api开头的请求路径
+        // 表示请求接口时去掉原先的路径
         pathRewrite: {
           '^/api': ''
         }
