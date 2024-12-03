@@ -1,12 +1,17 @@
 import request from '@/utils/request_user'
-// 查看地址
-export const lookAddress = () =>
+
+export const lookDishAll = () =>
     request({
-        // /user/addressBook/list
-        'url': '/addressBook/list',
+        // /user/dish/list
+        'url': '/dish/listAll',
         'method': 'get',
     });
-export default lookAddress;
+export const lookSetmealAll = () =>
+    request({
+        // /user/setmeal/list
+        'url': '/setmeal/listAll',
+        'method': 'get',
+    });
 // 根据ID查看地址
 export const lookAddressById = (id) =>
     request({

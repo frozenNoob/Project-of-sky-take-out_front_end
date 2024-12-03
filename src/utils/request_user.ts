@@ -12,8 +12,7 @@ import router from '@/router'
 const CancelToken = axios.CancelToken;
 
 const service = axios.create({
-  //这里 process.env.VUE_APP_BASE_API = http://localhost:8888/api,
-  // 即'前端IP/api'
+  // 后端的接口，直接暴露在这里而没有设置代理，以此验证后端跨域策略。
   baseURL: 'http://localhost:8080' + '/user',
   'timeout': 600000
 })

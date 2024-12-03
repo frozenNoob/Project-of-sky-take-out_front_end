@@ -25,7 +25,7 @@ const router = new Router({
     }
     return { x: 0, y: 0 };
   },
-  base: process.env.BASE_URL,
+  base: process.env.BASE_URL, //前端环境的根url,默认为协议+前端IP+端口
   routes: [
     {
       path: "/",

@@ -100,6 +100,7 @@ import {
   deleteAddress,
   updateAddress
 } from '@/api/user/address'
+// 相当于使用export default class extends Vue，由此使用mounted等方法。而非自定义类export default class
 export default {
   data() {
     return {

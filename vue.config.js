@@ -41,7 +41,7 @@ module.exports = {
     proxy: {
       '/api': {
         // 这里VUE_APP_URL = 'http://localhost:8080/admin'
-        target: process.env.VUE_APP_URL, //在根目录的.env.development文件下设置后端服务地址
+        target: process.env.VUE_APP_URL, //在根目录的.env.development（开发环境）文件下设置后端服务地址
         ws: false,
         secure: false,//非https
         changeOrigin: true,//设置此来解决前后端跨域问题，如果后端已经设置了，那么前端就不用设置！

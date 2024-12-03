@@ -36,7 +36,7 @@ service.interceptors.request.use(
       let url = config.url + '?';
       for (const propName of Object.keys(config.params)) {
         const value = config.params[propName];
-        var part = encodeURIComponent(propName) + '=';
+        var part = encodeURIComponent(propName) + '=';//如果值为空的话就后面不会拼接到url里面！
         if (value !== null && typeof (value) !== 'undefined') {
           if (typeof value === 'object') {
             for (const key of Object.keys(value)) {
