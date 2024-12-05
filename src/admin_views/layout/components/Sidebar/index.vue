@@ -20,24 +20,36 @@
     </div>
     <div class="sidebar">
       <el-menu>
-        <el-menu-item index="1-1">
-          <router-link to="/admin/dashboard">工作台</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-2">
-          <router-link to="/admin/statistics">数据统计</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-3">
-          <router-link to="/admin/order">订单管理</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-4">
-          <router-link to="/admin/setmeal">套餐管理</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-5">
-          <router-link to="/admin/dish">菜品管理</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-6">
-          <router-link to="/admin/category">分类管理</router-link>
-        </el-menu-item>
+        <router-link to="/admin/dashboard">
+          <el-menu-item index="1-1">
+            工作台
+          </el-menu-item>
+        </router-link>
+        <router-link to="/admin/statistics">
+          <el-menu-item index="1-2">
+            数据统计
+          </el-menu-item>
+        </router-link>
+        <router-link to="/admin/order">
+          <el-menu-item index="1-3">
+            订单管理
+          </el-menu-item>
+        </router-link>
+        <router-link to="/admin/setmeal">
+          <el-menu-item index="1-4">
+            套餐管理
+          </el-menu-item>
+        </router-link>
+        <router-link to="/admin/dish">
+          <el-menu-item index="1-5">
+            菜品管理
+          </el-menu-item>
+        </router-link>
+        <router-link to="/admin/category">
+          <el-menu-item index="1-6">
+            分类管理
+          </el-menu-item>
+        </router-link>
       </el-menu>
     </div>
   </div>

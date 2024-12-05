@@ -20,15 +20,21 @@
     </div>
     <div class="sidebar">
       <el-menu>
-        <el-menu-item index="1-1">
-          <router-link to="/user/category">首页</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-2">
-          <router-link to="/user/address">地址管理</router-link>
-        </el-menu-item>
-        <el-menu-item index="1-3">
-          <router-link to="/user/orderDetail">历史订单查询</router-link>
-        </el-menu-item>
+        <router-link to="/user/category">
+          <el-menu-item index="1-1">
+            首页
+          </el-menu-item>
+        </router-link>
+        <router-link to="/user/address">
+          <el-menu-item index="1-2">
+            地址管理
+          </el-menu-item>
+        </router-link>
+        <router-link to="/user/orderDetail">
+          <el-menu-item index="1-3">
+            历史订单查询
+          </el-menu-item>
+        </router-link>
       </el-menu>
     </div>
   </div>
