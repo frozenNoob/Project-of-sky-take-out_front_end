@@ -608,7 +608,7 @@ export default class extends Vue {
     this.phone = ''
     this.valueTime = []
     this.dialogOrderStatus = 0
-    this.$router.push('/order')
+    this.$router.push('/admin/order')
     console.log(activeIndex, '接收到了子组件的index')
   }
 
@@ -701,7 +701,7 @@ export default class extends Vue {
     this.diaForm = data.data
     this.row = row || { id: this.$route.query.orderId, status: status }
     if (this.$route.query.orderId) {
-      this.$router.push('/order')
+      this.$router.push('/admin/order')
     }
   }
 

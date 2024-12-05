@@ -78,6 +78,10 @@
                   <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">
                     删除
                   </el-button>
+                  <!-- 是否为默认地址 -->
+                  <el-button size="mini" type="primary" @click="setAddressStatus(scope.row)">
+                    {{ getAddressStatus(scope.row.isDefault) }}
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -98,7 +102,9 @@ import {
   lookAddressById,
   addAddress,
   deleteAddress,
-  updateAddress
+  updateAddress,
+  setDefaultAddress,
+  lookDefaultAddress,
 } from '@/api/user/address'
 // 相当于使用export default class extends Vue，由此使用mounted等方法。而非自定义类export default class
 export default {
@@ -130,6 +136,17 @@ export default {
     this.getAddressList();
   },
   methods: {
+    async setAddressStatus(addressInformation) {
+      addressInformation['isDefault'] = addressInformation['isDefault'] == 1 ? 0 : 1;
+      await setDefaultAddress(addressInformation);
+    },
+    getAddressStatus(isDefault: number) {
+      if (isDefault == 1) {
+        return '取消默认地址';
+      } else {
+        return '设置为默认地址';
+      }
+    },
     async getAddressList() {
       const response = await lookAddress();
       this.address_data = response.data.data;

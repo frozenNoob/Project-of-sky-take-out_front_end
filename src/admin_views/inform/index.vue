@@ -1,56 +1,72 @@
+<!-- 实际上这个组件没被用到！！？ -->
+<!-- eslint-disable no-eval -->
 <template>
   <div class="dashboard-container">
     <div class="informBox">
       <ul class="conTab">
         <li v-for="(item, index) in tabList" :key="index" :class="activeIndex === index ? 'active' : ''"
-          @click="handleClass(index)">
+            @click="handleClass(index)"
+        >
           <el-badge class="item" :class="ountUnread >= 10 ? 'badgeW' : ''" :value="ountUnread === 0 ? null : ountUnread > 99 ? '99+' : ountUnread
-            " :hidden="!([1].includes(item.value) && ountUnread)">{{ item.label }}</el-badge>
+          " :hidden="!([1].includes(item.value) && ountUnread)"
+          >
+            {{ item.label }}
+          </el-badge>
         </li>
       </ul>
 
-      <el-button icon="iconfont icon-clear" class="right-el-button" v-if="status === 1 && baseData.length > 0"
-        @click="handleBatch">全部已读</el-button>
-      <el-button icon="iconfont icon-clear" class="right-el-button onbutton" disabled v-else>全部已读</el-button>
+      <el-button v-if="status === 1 && baseData.length > 0" icon="iconfont icon-clear" class="right-el-button"
+                 @click="handleBatch"
+      >
+        全部已读
+      </el-button>
+      <el-button v-else icon="iconfont icon-clear" class="right-el-button onbutton" disabled>
+        全部已读
+      </el-button>
     </div>
     <div class="container newBox" :class="{ hContainer: baseData.length }">
-      <div class="informList" v-if="baseData.length > 0">
+      <div v-if="baseData.length > 0" class="informList">
         <div v-for="(item, index) in baseData" :key="index">
           <!-- 待接单 -->
-          <div class="item" v-if="item.type === 1">
+          <div v-if="item.type === 1" class="item">
             <div class="tit">
               <span>【待接单】</span>{{ item.arrNew[0]
               }}<span class="fontOrderTip" @click="handleSetStatus(item.id)">
-                <router-link :to="'/order?status=' + 2">{{
+                <router-link :to="'/admin/order?status=' + 2">{{
                   item.arrNew[1]
                 }}</router-link></span>{{ item.arrNew[2]
               }}<span class="time">{{ item.createTime }}</span>
             </div>
           </div>
-          <div class="item" v-if="item.type === 2">
+          <div v-if="item.type === 2" class="item">
             <div class="tit">
               <i>急</i><span>【待接单】</span>{{ item.arrNew[0]
-              }}<span class="fontOrderTip" @click="handleSetStatus(item.id)"><router-link :to="'/order?status=' + 2">{{
+              }}<span class="fontOrderTip" @click="handleSetStatus(item.id)"><router-link
+                :to="'/admin/order?status=' + 2"
+              >{{
                 item.arrNew[1]
-                  }}</router-link></span>{{ item.arrNew[2]
+              }}</router-link></span>{{ item.arrNew[2]
               }}<span class="time">{{ item.createTime }}</span>
             </div>
           </div>
           <!-- end -->
           <!-- 待派送 -->
-          <div class="item" v-if="item.type === 3">
+          <div v-if="item.type === 3" class="item">
             <div class="tit">
               <span>【待派送】</span>{{ item.arrNew[0]
-              }}<span class="fontOrderTip" @click="handleSetStatus(item.id)"><router-link :to="'/order?status=' + 2">{{
+              }}<span class="fontOrderTip" @click="handleSetStatus(item.id)"><router-link
+                :to="'/admin/order?status=' + 2"
+              >{{
                 item.arrNew[1]
-                  }}</router-link></span>{{ item.arrNew[2]
+              }}</router-link></span>{{ item.arrNew[2]
               }}<span class="time">{{ item.createTime }}</span>
             </div>
           </div>
           <!-- end -->
           <!-- 催单 -->
-          <div class="item" v-if="item.type === 4" @mouseenter="toggleShow(item.id, index)"
-            @mouseleave="mouseLeaves(index)">
+          <div v-if="item.type === 4" class="item" @mouseenter="toggleShow(item.id, index)"
+               @mouseleave="mouseLeaves(index)"
+          >
             <div :class="isActive ? 'titAlready' : ''">
               <div class="tit">
                 <span>【催单】</span>{{ item.arrNew[0] }}
@@ -96,8 +112,9 @@
               </div>
             </div>
           </div> -->
-          <div class="item" v-if="item.type === 5" @mouseenter="toggleShow(item.id, index)"
-            @mouseleave="mouseLeaves(index)">
+          <div v-if="item.type === 5" class="item" @mouseenter="toggleShow(item.id, index)"
+               @mouseleave="mouseLeaves(index)"
+          >
             <div :class="isActive ? 'titAlready' : ''">
               <div class="tit">
                 <span>【今日数据】</span>认真工作的同时也要好好生活。<span class="time">{{ item.createTime }}</span>
@@ -123,8 +140,9 @@
       </div>
       <Empty v-else :is-search="isSearch" />
       <el-pagination v-if="counts > 10" class="pageList" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper" :total="counts" @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
+                     layout="total, sizes, prev, pager, next, jumper" :total="counts" @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
@@ -200,6 +218,7 @@ export default class extends Vue {
         // 处理催单、闭店详情数据
         val.arrNew = arrContent
         objNew = { ...val }
+        // eslint-disable-next-line no-eval
         objNew.details = eval('(' + objNew.details + ')')
         arrDetails.push(objNew)
       })

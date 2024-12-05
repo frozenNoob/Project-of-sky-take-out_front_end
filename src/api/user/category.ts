@@ -17,7 +17,7 @@ export const lookCategoryByType = (type) =>
     request({
         'url': `/category/list`,
         'method': 'get',
-        'params':{
+        'params': {
             'type': type
         }
     });
@@ -26,7 +26,7 @@ export const lookDishById = (categoryId) =>
     request({
         'url': `/dish/list`,
         'method': 'get',
-        'params':{
+        'params': {
             'categoryId': categoryId
         }
     });
@@ -35,30 +35,7 @@ export const lookSetmealById = (categoryId) =>
     request({
         'url': `/setmeal/list`,
         'method': 'get',
-        'params':{
+        'params': {
             'categoryId': categoryId
         }
-    });
-// 新增地址
-export const addAddress = (data) =>
-    request({
-        'url': '/addressBook',
-        'method': 'post',
-        data
-    });
-// 删除地址
-export const deleteAddress = (id) =>
-    request({
-        'url': `/addressBook`,
-        'method': 'delete',
-        'params': {
-            'id': id
-        }
-    });
-// 更新地址
-export const updateAddress = (data) =>
-    request({
-        'url': '/addressBook',
-        'method': 'put',
-        data
     });

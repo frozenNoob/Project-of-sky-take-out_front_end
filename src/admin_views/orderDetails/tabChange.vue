@@ -1,15 +1,10 @@
 <!--  -->
 <template>
   <div class="tab-change">
-    <div v-for="item in changedOrderList"
-         :key="item.value"
-         class="tab-item"
-         :class="{ active: item.value === activeIndex }"
-         @click="tabChange(item.value)">
-      <el-badge :class="{'special-item':item.num<10}"
-                class="item"
-                :value="item.num > 99 ? '99+' : item.num"
-                :hidden="!([2, 3, 4].includes(item.value) && item.num)">
+    <div v-for="item in changedOrderList" :key="item.value" class="tab-item"
+      :class="{ active: item.value === activeIndex }" @click="tabChange(item.value)">
+      <el-badge :class="{ 'special-item': item.num < 10 }" class="item" :value="item.num > 99 ? '99+' : item.num"
+        :hidden="!([2, 3, 4].includes(item.value) && item.num)">
         {{ item.label }}
       </el-badge>
     </div>
@@ -26,8 +21,14 @@ import { getOrderDetailPage } from '@/api/order'
 export default class extends Vue {
   @Prop({ default: '' }) orderStatics: any
   @Prop({ default: '' }) defaultActivity: any
-  private activeIndex: number = this.defaultActivity || 0
-
+  // private activeIndex: number = this.defaultActivity || 0 //error
+  private activeIndex: number = 0;
+  // created() {
+  //   this.activeIndex = this.defaultActivity || 0;
+  // }
+  mounted(){
+    this.activeIndex = this.defaultActivity || 0;
+  }
   @Watch('defaultActivity')
   private onChange(val) {
     this.activeIndex = Number(val)
@@ -87,12 +88,14 @@ export default class extends Vue {
     background-color: white;
     border-left: none;
     cursor: pointer;
+
     .special-item {
       .el-badge__content {
         width: 20px;
         padding: 0 5px;
       }
     }
+
     .item {
       .el-badge__content {
         background-color: #fd3333 !important;
@@ -102,16 +105,19 @@ export default class extends Vue {
         min-height: 18px;
         // border-radius: 50%;
       }
+
       .el-badge__content.is-fixed {
         top: 14px;
         right: 2px;
       }
     }
   }
+
   .active {
     background-color: #ffc200;
     font-weight: bold;
   }
+
   .tab-item:first-child {
     border-left: 1px solid #e5e4e4;
   }

@@ -36,3 +36,16 @@ export const updateAddress = (data) =>
         'method': 'put',
         data
     });
+// 设置为默认地址
+export const setDefaultAddress = (data) =>
+    request({
+        'url': '/addressBook/default',
+        'method': 'put',
+        data
+    })
+// 查询默认地址
+export const lookDefaultAddress = () =>
+    request({
+        'url': '/addressBook/default',
+        'method': 'get',
+    })

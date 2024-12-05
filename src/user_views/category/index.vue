@@ -89,7 +89,8 @@
       </el-table>
     </el-main>
     <el-footer style="height: 40% ;min-width: 100%;">
-      <el-table :data="shopCart" class="categoryShopCartTable" style="overflow: scroll ;" :stripe="true">
+      <el-table :data="shopCart" class="categoryShopCartTable"
+        style="overflow: scroll; margin-top:2%;position: relative;;" :stripe="true">
         <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
@@ -136,6 +137,9 @@
 
 <script lang="ts">
 import {
+  lookDefaultAddress
+} from '@/api/user/address'
+import {
   lookDishAll,
   lookSetmealAll,
   lookCategoryByType,
@@ -148,7 +152,10 @@ import {
   deleteOneItemInShopCart,
   deleteAllInShopCart
 } from '@/api/user/shopCart'
-import { Axis } from 'echarts';
+import {
+  orderSubmit
+} from '@/api/user/order';
+
 // import ShopCart from './shop_cart/index.vue'//使用组件的第二种方法
 // import look from '@/api/user/address';//default导出的默认模块
 export default {
@@ -230,13 +237,43 @@ export default {
       await deleteAllInShopCart();
       this.lookCart();//刷新购物车
     },
-    sumUpShopCart() {
+    async sumUpShopCart() {
+      let defaultAddress = (await lookDefaultAddress()).data.data;
+      // 获取当前时间
+      let currentDateTime = new Date();
+
+      // 增加一个小时
+      currentDateTime.setHours(currentDateTime.getHours() + 1);
+
+      // 格式化时间为'YYYY-MM-dd HH:mm:ss'
+      let formattedDateTime = currentDateTime.toISOString().slice(0, 19).replace('T', ' ');
+
+      console.log(formattedDateTime);
+      let orderItem = {
+        'addressBookId': defaultAddress['id'],
+        'payMethod': 1,//1为微信，2为支付宝
+        'remark': '备注1',//备注
+        'estimatedDeliveryTime': formattedDateTime,//预计送达时间
+        'deliveryStatus': 0,//配送状态
+        'tablewareNumber': 1,//餐具数量
+        'tablewareStatus': 0,
+        'packAmount': 0,//打包费
+        'amount': this.getCartAllAmount()
+      };
+      // alert('成功提交订单');//alert会阻塞当前状态
+      const response = await orderSubmit(orderItem);
+      if (response.data.code == 1) {
+        alert('支付成功');
+        this.lookCart();
+      } else {
+        alert('支付失败');
+      }
 
     },
     getCartAllAmount() {
       let allAmount = 0;
       this.shopCart.forEach(menuRow => {
-        allAmount += menuRow.amount;
+        allAmount += menuRow.amount * menuRow.number;
       });
       return allAmount;
     },
@@ -450,6 +487,7 @@ export default {
       position: relative; //fixed内用relative会失去作用
       min-width: 100%; //最小宽度占比（随着屏幕缩放不会再比这个小，用于显示全部列内容）
       min-height: 100%;
+      padding-top: 10%;
       background: #13c150;
       top: 0%;
     }
