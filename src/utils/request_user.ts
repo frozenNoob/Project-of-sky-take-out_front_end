@@ -37,7 +37,7 @@ service.interceptors.request.use(
     // config.headers['Access-Control-Allow-Origin'] = '*'
     // config.headers['Content-Type'] = 'application/json;'
     // get请求映射params参数
-    if (config.method === 'get' && config.params) {
+    if ((config.method === 'get'|| config.method === 'delete') && config.params) {
       let url = config.url + '?';
       for (const propName of Object.keys(config.params)) {
         const value = config.params[propName];

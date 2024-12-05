@@ -12,11 +12,32 @@ export const lookSetmealAll = () =>
         'url': '/setmeal/listAll',
         'method': 'get',
     });
-// 根据ID查看地址
-export const lookAddressById = (id) =>
+// type=1为菜品分类，type=2为套餐分类
+export const lookCategoryByType = (type) =>
     request({
-        'url': `/addressBook/${id}`,
+        'url': `/category/list`,
         'method': 'get',
+        'params':{
+            'type': type
+        }
+    });
+// 根据菜品分类ID查看菜品
+export const lookDishById = (categoryId) =>
+    request({
+        'url': `/dish/list`,
+        'method': 'get',
+        'params':{
+            'categoryId': categoryId
+        }
+    });
+// 根据套餐分类ID查看菜品
+export const lookSetmealById = (categoryId) =>
+    request({
+        'url': `/setmeal/list`,
+        'method': 'get',
+        'params':{
+            'categoryId': categoryId
+        }
     });
 // 新增地址
 export const addAddress = (data) =>
