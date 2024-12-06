@@ -86,16 +86,17 @@
               <el-table key="tab02" :data="dishInSetmeal" :stripe="true">
                 <el-table-column prop="name" label="菜品名称">
                 </el-table-column>
-                <!-- <el-table-column key="image" prop="image" label="图片">
+                <el-table-column key="image" prop="image" label="图片">
                   <template slot-scope="scopeSet">
-                    <el-image style="width: 40px; height: 40px; border: none; cursor: pointer" :src="scopeSet.row.image"> -->
-                <!--显示错误情况下的指定图片  -->
-                <!-- <div slot="error" class="image-slot">
+                    <el-image style="width: 40px; height: 40px; border: none; cursor: pointer"
+                      :src="scopeSet.row.image">
+                      <!--显示错误情况下的指定图片  -->
+                      <div slot="error" class="image-slot">
                         <img src="./../../assets/noImg.png" style="width: auto; height: 40px; border: none">
                       </div>
                     </el-image>
                   </template>
-</el-table-column> -->
+                </el-table-column>
                 <el-table-column prop="copies" label="份数">
                 </el-table-column>
                 <el-table-column prop="description" label="描述">
@@ -103,12 +104,9 @@
               </el-table>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="visualSetmealDialog = false">取 消</el-button>
-                <!-- 这个作用域内不能使用外层的scope了 -->
-                <!-- <p>这是{{ scope.row.name }}</p> -->
-
-                <!-- 所以需要额外的记录存储 -->
-                <!-- <p>这是{{ menuRowForSetmeal.name }}</p> -->
-                <el-button type="primary" @click="addSetmealToShopCart(menuRowForSetmeal, 'inMenu')">确 定</el-button>
+                <!-- 需要在el-组件中传递使用scope.row, 不然不会改变，都是最后一行-->
+                <!-- <div>这是{{ scope.row.name }}</div> -->
+                <el-button type="primary" @click="addSetmealToShopCart(scope.row, 'inMenu')">确 定</el-button>
               </span>
             </el-dialog>
             <!-- 套餐加入到购物车需要的对话框 -->
