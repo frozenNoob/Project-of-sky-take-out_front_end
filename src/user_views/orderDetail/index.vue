@@ -11,18 +11,19 @@
       <el-container>
         <el-main>
           <template>
-            <el-table :data="historyDetailedOrder['records']" :stripe="true" style="min-width: 100%; height: 100%;">
-              <el-table-column prop="consignee" label="收货人" width="180">
+            <el-table :data="historyDetailedOrder['records']" :stripe="true" style=" height:
+              100%;">
+              <el-table-column prop="consignee" label="收货人" min-width="10%">
               </el-table-column>
-              <el-table-column prop="phone" label="手机号" width="180">
+              <el-table-column prop="phone" label="手机号" min-width="10%">
               </el-table-column>
-              <el-table-column prop="address" label="地址">
+              <el-table-column prop="address" label="地址" min-width="10%">
               </el-table-column>
-              <el-table-column prop="orderTime" label="下单时间">
+              <el-table-column prop="orderTime" label="下单时间" min-width="10%">
               </el-table-column>
-              <el-table-column prop="payMethod" label="支付方式">
+              <el-table-column prop="payMethod" label="支付方式" min-width="10%">
               </el-table-column>
-              <el-table-column prop="amount" label="支付金额">
+              <el-table-column prop="amount" label="支付金额" min-width="10%">
               </el-table-column>
               <!-- 牢记， slot-scope里面不能套el-table-column -->
               <!-- <template slot-scope="{ row }">
@@ -33,17 +34,17 @@
                   {{ getPayStatus(row.payStatus) }}
                 </el-table-column>
               </template> -->
-              <el-table-column label="支付状态">
+              <el-table-column label="支付状态" min-width="5%">
                 <template slot-scope="{ row }">
-                  这是{{ getStatus(row.status) }}
+                  {{ getStatus(row.status) }}
                 </template>
               </el-table-column>
-              <el-table-column label="状态">
+              <el-table-column label="状态" min-width="5%">
                 <template slot-scope="{row}">
-                  这是{{ getPayStatus(row.payStatus) }}
+                  {{ getPayStatus(row.payStatus) }}
                 </template>
               </el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="操作" min-width="20%">
                 <template slot-scope="scope">
                   <el-button size="mini" type="danger" @click="remindTheOrder(scope.row.id)">
                     催单

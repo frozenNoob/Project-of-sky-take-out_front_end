@@ -15,7 +15,7 @@
       </el-select>
     </el-header>
     <el-main style="height: 40%;">
-      <el-table :data="menu" :stripe="true">
+      <el-table key="tab01" :data="menu" :stripe="true">
         <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
@@ -43,7 +43,7 @@
             <el-button size="primary" @click="addToCart(scope.row, 'inMenu')">
               加入购物车
             </el-button>
-            <!-- 菜品加入购物车需要列表，这里获取到的不是最新的数据，这点需要注意 -->
+            <!-- 菜品加入购物车需要的对话框，这里获取到的不是最新的数据，这点需要注意 -->
             <el-dialog title="加入菜品到购物车" :visible.sync="visualDishFlavorDialog">
               <el-form ref="dishFlavorDialogData" :model="dishFlavorDialogData" label-width="80px">
                 <el-form-item label="菜品名称">
@@ -81,16 +81,52 @@
                 </el-form-item>
               </el-form>
             </el-dialog>
+            <el-dialog title="套餐内菜品介绍" :visible.sync="visualSetmealDialog" width="50%">
+              <!-- <p>这是菜品{{ dishInSetmeal[0]['name'] }}</p> -->
+              <el-table key="tab02" :data="dishInSetmeal" :stripe="true">
+                <el-table-column prop="name" label="菜品名称">
+                </el-table-column>
+                <!-- <el-table-column key="image" prop="image" label="图片">
+                  <template slot-scope="scopeSet">
+                    <el-image style="width: 40px; height: 40px; border: none; cursor: pointer" :src="scopeSet.row.image"> -->
+                <!--显示错误情况下的指定图片  -->
+                <!-- <div slot="error" class="image-slot">
+                        <img src="./../../assets/noImg.png" style="width: auto; height: 40px; border: none">
+                      </div>
+                    </el-image>
+                  </template>
+</el-table-column> -->
+                <el-table-column prop="copies" label="份数">
+                </el-table-column>
+                <el-table-column prop="description" label="描述">
+                </el-table-column>
+              </el-table>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="visualSetmealDialog = false">取 消</el-button>
+                <!-- 这个作用域内不能使用外层的scope了 -->
+                <!-- <p>这是{{ scope.row.name }}</p> -->
+
+                <!-- 所以需要额外的记录存储 -->
+                <!-- <p>这是{{ menuRowForSetmeal.name }}</p> -->
+                <el-button type="primary" @click="addSetmealToShopCart(menuRowForSetmeal, 'inMenu')">确 定</el-button>
+              </span>
+            </el-dialog>
+            <!-- 套餐加入到购物车需要的对话框 -->
             <el-button size="mini" type="danger" @click="deleteFromCart(scope.row)">
               去掉
             </el-button>
+            <!-- 套餐加入到购物车需要的对话框 -->
           </template>
         </el-table-column>
       </el-table>
     </el-main>
-    <el-footer style="height: 40% ;min-width: 100%;">
-      <el-table :data="shopCart" class="categoryShopCartTable"
-        style="overflow: scroll; margin-top:2%;position: relative;;" :stripe="true">
+
+    <el-footer style="height: 40% ;max-width: 90%;">
+      <P style="font-size: 40px; color: #000000">
+        <i class=" el-icon-shopping-cart-2">购物车</i>
+      </P>
+      <el-table key="tab03" :data="shopCart" class="categoryShopCartTable"
+        style="overflow: scroll; margin-top:2%;position: relative;" :stripe="true">
         <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
@@ -100,7 +136,7 @@
         </el-table-column>
         <el-table-column prop="number" label="当前数量">
         </el-table-column>
-        <el-table-column prop="amount" label="总价（元）">
+        <el-table-column prop="amount" label="单价（元）">
         </el-table-column>
         <el-table-column prop="description" label="描述">
         </el-table-column>
@@ -120,13 +156,23 @@
       </el-table>
       <div class="settlement">
         <p style="font-size: large;">
-          当前总价为
+          <i class="el-icon-view" style="font-size: 40px">
+            当前总价为
+          </i>
           <span style="right: 50%;">
             {{ getCartAllAmount() }}元
-            <el-button size="medium" type="primary" @click="sumUpShopCart()">点此结算</el-button>
+            <el-button size="medium" type="primary" @click="sumUpShopCart()">
+              <i class="el-icon-sell" style="font-size: 40px">
+                点此结算
+              </i>
+            </el-button>
           </span>
           <span>
-            <el-button size="medium" type="danger" @click="clearAllInShopCart()">清空购物车</el-button>
+            <el-button size="medium" type="danger" @click="clearAllInShopCart()">
+              <i class="el-icon-delete" style="font-size: 40px">
+                清空购物车
+              </i>
+            </el-button>
           </span>
         </p>
       </div>
@@ -144,7 +190,8 @@ import {
   lookSetmealAll,
   lookCategoryByType,
   lookDishById,
-  lookSetmealById
+  lookSetmealById,
+  lookDishInSetmeal,
 } from '@/api/user/category';
 import {
   addShopCart,
@@ -226,6 +273,16 @@ export default {
       dishFlavorFourthItem: '辣度',
       dishFlavor: {}, //所有味道的字典
       visualDishFlavorDialog: false,//添加味道
+      visualSetmealDialog: false, //添加套餐时查询所含菜品
+      dishInSetmeal: [
+        {
+          'name': '',
+          'image': '',
+          'description': '',
+          'copies': 0
+        }
+      ],
+      menuRowForSetmeal: [],
     }
   },
   mounted() {
@@ -272,8 +329,8 @@ export default {
     },
     getCartAllAmount() {
       let allAmount = 0;
-      this.shopCart.forEach(menuRow => {
-        allAmount += menuRow.amount * menuRow.number;
+      this.shopCart.forEach(cartRow => {
+        allAmount += cartRow.amount * cartRow.number;
       });
       return allAmount;
     },
@@ -359,6 +416,7 @@ export default {
     },
     async addToCart(menuRow, way) {
       console.log('该行是', menuRow);
+      this.menuRowForSetmeal = menuRow;//套餐显示所有菜品那个组件dialog table中需要这个
       // 菜品
       if (menuRow.type == 1) {
         if (way == 'inMenu') {
@@ -366,17 +424,37 @@ export default {
           this.dishFlavorDialogData = menuRow;
           // 口味编辑表单
           this.visualDishFlavorDialog = true;
-          console.log('在Dialog被关闭前，后续指令会继续执行，所以这里把函数放到Dialog中');
+          console.log('在Dialog被关闭前，后续指令会继续执行，所以这里把函数放到Dialog的确认键中');
         } else { //inCart
           this.addDishToShopCart(menuRow, way);
         }
       } else if (menuRow.type == 2) { //套餐
-        alert('加入套餐到购物车！');
-        await addShopCart({ 'setmealId': menuRow.id });
+        if (way == 'inMenu') {
+          let dishInSetMeal = (await lookDishInSetmeal(menuRow.id)).data.data;
+          this.dishInSetmeal = dishInSetMeal;//注意大小写！
+          console.log('此时套餐内菜品信息为：', this.dishInSetmeal);
+          this.visualSetmealDialog = true;//交由对话框解决
+        } else {
+          let response = await addShopCart({ 'setmealId': menuRow.id });
+          if (response.data.code == 1) {
+            alert('成功加入套餐到购物车！');//
+          }
+        }
       } else {
         console.log('未知类型，这种情况理论上不可能出现！此时menuRow为 ', menuRow);
       }
       this.lookCart();//刷新购物车
+    },
+    async addSetmealToShopCart(menuRow, way) {
+      console.log('此行套餐为', menuRow);
+      if (way == 'inMenu') {
+        let response = await addShopCart({ 'setmealId': menuRow.id });
+        if (response.data.code == 1) {
+          alert('成功加入套餐到购物车！');//
+        }
+        this.lookCart();
+        this.visualSetmealDialog = false;
+      }
     },
     async addDishToShopCart(menuRow, way) {
       console.log('该行是', menuRow, '方法为：', way);
@@ -426,17 +504,18 @@ export default {
       this.lookCart();//刷新
     },
     async lookCart() {
+      console.log('刷新购物车');
       const data = (await lookShopCart()).data.data;
       for (let i = 0; i < data.length; ++i) {
-        var menuRow = data[i];
-        if (menuRow.dishId != null) {
-          menuRow['type'] = 1;
-          menuRow['id'] = menuRow['dishId'];
-          let flavor = JSON.parse(menuRow['dishFlavor']);
-          console.log('返回到购物车的菜品口味为：', flavor);
-        } else if (menuRow.setmealId != null) {
-          menuRow['type'] = 2;
-          menuRow['id'] = menuRow['setmealId'];
+        let cartRow = data[i];
+        if (cartRow.dishId != null) {
+          cartRow['type'] = 1;
+          cartRow['id'] = cartRow['dishId'];
+          // let flavor = JSON.parse(cartRow['dishFlavor']);
+          // console.log('返回到购物车的菜品口味为：', flavor);
+        } else if (cartRow.setmealId != null) {
+          cartRow['type'] = 2;
+          cartRow['id'] = cartRow['setmealId'];
         }
       }
       this.shopCart = data;
@@ -483,23 +562,23 @@ export default {
 
     // 理论上来说，穿透的时候会直接影响在本文件的同个class的所有用到该第三方库组件的地方
     // 但是这里没用，待解决》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》
-    .categoryShopCartTable>>>.el-table__inner {
+    /*.categoryShopCartTable>>>.el-table__inner {
       position: relative; //fixed内用relative会失去作用
-      min-width: 100%; //最小宽度占比（随着屏幕缩放不会再比这个小，用于显示全部列内容）
+      <!-- 最大宽度（max-width）属性用于设置元素的最大宽度。当元素的实际宽度大于最大宽度时，
+     元素的宽度将被限制在最大宽度之内。这对于适应不同屏幕大小的布局非常有用。 -->
+      //最小宽度（min-width）属性用于设置元素的最小宽度。当元素的实际宽度小于最小宽度时，元素的宽度将被扩展到最小宽度。
+      //这对于确保内容的可读性和可用性非常有用。
+      min-width: 100%;
       min-height: 100%;
       padding-top: 10%;
       background: #13c150;
       top: 0%;
-    }
+    }*/
 
-    // .categoryShopCartTable{
-    //   min-width: 100%;//最小宽度占比（随着屏幕缩放不会再比这个小，用于显示全部列内容）
-    //   min-height: 100%;
-    // }
     .settlement {
       background: #e7b54a;
       position: fixed; //固定后的是没有滚动条的，所以可以通过分页购物车或者弹窗来解决这一显示问题(改变position也没用）。
-      height: 10%;
+      height: 5%;
       width: 100%;
       bottom: 0;
       z-index: 3;

@@ -22,34 +22,52 @@
       <el-menu>
         <router-link to="/admin/dashboard">
           <el-menu-item index="1-1">
-            工作台
+            <i class="el-icon-s-home" style="font-size: 20px;">
+              工作台
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
         <router-link to="/admin/statistics">
           <el-menu-item index="1-2">
-            数据统计
+            <i class="el-icon-s-data" style="font-size: 20px;">
+              数据统计
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
         <router-link to="/admin/order">
           <el-menu-item index="1-3">
-            订单管理
+            <i class="el-icon-goods" style="font-size: 20px;">
+              订单管理
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
         <router-link to="/admin/setmeal">
           <el-menu-item index="1-4">
-            套餐管理
+            <i class="el-icon-burger" style="font-size: 20px;">
+              套餐管理
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
         <router-link to="/admin/dish">
           <el-menu-item index="1-5">
-            菜品管理
+            <i class="el-icon-dish-1" style="font-size: 20px;">
+              菜品管理
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
         <router-link to="/admin/category">
           <el-menu-item index="1-6">
-            分类管理
+            <i class="el-icon-collection-tag" style="font-size: 20px;">
+              分类管理
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
       </el-menu>
     </div>
   </div>

@@ -39,3 +39,9 @@ export const lookSetmealById = (categoryId) =>
             'categoryId': categoryId
         }
     });
+// 查看套餐内的菜品
+export const lookDishInSetmeal = (id) =>
+    request({
+        'url': `setmeal/dish/${id}`,
+        'method': 'get',
+    });

@@ -22,17 +22,25 @@
       <el-menu>
         <router-link to="/user/category">
           <el-menu-item index="1-1">
-            首页
+            <i class="el-icon-goods" style="font-size: 20px;max-width: 100%">
+              首页
+            </i>
           </el-menu-item>
         </router-link>
+        <br>
         <router-link to="/user/address">
           <el-menu-item index="1-2">
-            地址管理
+            <i class="el-icon-location-outline" style="font-size: 20px ;max-width: 100%;">
+              地址管理
+            </i>
           </el-menu-item>
         </router-link>
-        <router-link to="/user/orderDetail">
+        <br>
+        <router-link to="/user/orderDetail" style="font-size: 20px;max-width: 100%">
           <el-menu-item index="1-3">
-            历史订单查询
+            <i class="el-icon-sell">
+              历史订单查询
+            </i>
           </el-menu-item>
         </router-link>
       </el-menu>
@@ -44,7 +52,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { AppModule } from '@/store/modules/app'
 import { UserModule } from '@/store/modules/user'
-import SidebarItem from './SidebarItem.vue'
+// import SidebarItem from './SidebarItem.vue'
 import variables from '@/styles/_variables.scss'
 import { getSidebarStatus, setSidebarStatus } from '@/utils/cookies'
 import Cookies from 'js-cookie'
