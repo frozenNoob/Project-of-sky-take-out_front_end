@@ -104,14 +104,21 @@
               </el-table>
               <span slot="footer" class="dialog-footer">
                 <el-button @click="visualSetmealDialog = false">取 消</el-button>
-                <!-- 需要在el-组件中传递使用scope.row, 不然不会改变，都是最后一行-->
+                <!-- 因为间隔一层dialog使用时，不要使用dialog外层传来的scope.row，因为它不会改变，都是最后一行-->
                 <!-- <div>这是{{ scope.row.name }}</div> -->
-                <el-button type="primary" @click="addSetmealToShopCart(scope.row, 'inMenu')">确 定</el-button>
+                <!-- <el-button type="primary" @click="addSetmealToShopCart(scope.row, 'inMenu')">确 定</el-button> -->
+                <!-- 所以需要额外的记录存储 -->
+                <!-- <p>这是{{ menuRowForSetmeal.name }}</p> -->
+                <el-button type="primary" @click="addSetmealToShopCart(menuRowForSetmeal, 'inMenu')">确 定</el-button>
               </span>
+              <!-- 间隔一层dialog使用时，不要使用dialog外层传来的scope.row，因为它不会改变，都是最后一行-->
+              <!-- <p>这是D {{ scope.row.name }}</p> -->
             </el-dialog>
             <!-- 套餐加入到购物车需要的对话框 -->
-            <el-button size="mini" type="danger" @click="deleteFromCart(scope.row)">
+            <el-button size="mini" type="danger" @click="deleteFromCart(scope.row.name)">
               去掉
+              <!-- 能够正常显示 -->
+              <!-- <p>这是B {{ scope.row.name }}</p> -->
             </el-button>
             <!-- 套餐加入到购物车需要的对话框 -->
           </template>
