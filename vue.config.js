@@ -38,13 +38,14 @@ module.exports = {
       errors: true
     },
     // 设置代理，由此隐藏后端接口，也能借此处理跨域问题（在前端和后端中选择其一处理即可）。
+    // 来解决前后端跨域问题，如果后端已经设置了，那么前端就不用设置！
     proxy: {
       '/api': {
         // 这里VUE_APP_URL = 'http://localhost:8080/admin'
         target: process.env.VUE_APP_URL, //在根目录的.env.development（开发环境）文件下设置后端服务地址
         ws: false,
         secure: false,//非https
-        changeOrigin: true,//设置此来解决前后端跨域问题，如果后端已经设置了，那么前端就不用设置！
+        changeOrigin: true,//设置此就能该改变localhost为后端的私网/公网IP地址，而非环回地址localhost。
         // '^/api'表示匹配到以/api开头的请求路径
         // 表示请求接口时去掉原先的路径
         pathRewrite: {

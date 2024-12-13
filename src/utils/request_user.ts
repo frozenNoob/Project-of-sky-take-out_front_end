@@ -13,7 +13,8 @@ const CancelToken = axios.CancelToken;
 
 const service = axios.create({
   // 后端的接口，直接暴露在这里而没有设置代理，以此验证后端跨域策略。
-  baseURL: 'http://localhost:8080' + '/user',
+  // baseURL: 'http://localhost:8080' + '/user',
+  baseURL: process.env.VUE_APP_URL2,
   'timeout': 600000
 })
 

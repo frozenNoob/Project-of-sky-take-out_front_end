@@ -42,7 +42,9 @@ import { Route } from 'vue-router'
 import { Form as ElForm, Input } from 'element-ui'
 import { UserModule } from '@/store/modules/user'
 import { isValidUsername } from '@/utils/validate'
-import { login } from '@/api/employee'
+import {
+  userLogin
+} from '@/api/user/user'
 import axios from 'axios'
 
 @Component({
@@ -86,24 +88,34 @@ export default class extends Vue {
     (this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         this.loading = true
+        // 用户登录
+        let response = await userLogin(this.loginForm);
+        if (response.data.code == '1') {
+          console.log('POST 请求成功', response.data);
+          //用户端是存储到浏览器的localStorage，而管理员（员工端）是存储到cookie中的，注意区分
+          localStorage.setItem('token', response.data.data.token);
+          this.$router.push('/user') //登录成功，重定向到用户起始界面
+        }else {
+          console.log('登录失败');
+        }
         // 默认情况下，Axios会将Content-Type设置为application/json,这里手动展示一下
-        await axios.post('http://localhost:8080/user/user/login', this.loginForm , {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(response => {
-            if(String(response.data.code == '1')){
-              console.log('POST 请求成功', response.data);
-              //用户端是存储到浏览器的localStorage，而管理员（员工端）是存储到cookie中的，注意区分
-              localStorage.setItem('token', response.data.data.token);
-              this.$router.push('/user') //登录成功，重定向到用户起始界面
-            }
-          })
-          .catch(error => {
-            console.error('POST 请求失败', error);
-            this.loading = false
-          });
+        // await axios.post('http://localhost:8080/user/user/login', this.loginForm , {
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   }
+        // })
+        //   .then(response => {
+        //     if(response.data.code == '1'){
+        //       console.log('POST 请求成功', response.data);
+        //       //用户端是存储到浏览器的localStorage，而管理员（员工端）是存储到cookie中的，注意区分
+        //       localStorage.setItem('token', response.data.data.token);
+        //       this.$router.push('/user') //登录成功，重定向到用户起始界面
+        //     }
+        //   })
+        //   .catch(error => {
+        //     console.error('POST 请求失败', error);
+        //     this.loading = false
+        //   });
       } else {
         return false
       }
