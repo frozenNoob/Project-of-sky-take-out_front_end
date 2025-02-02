@@ -59,6 +59,7 @@ service.interceptors.request.use(
       config.params = {};
       config.url = url;
     }
+    console.log('user中，request的url为：', config.url)
     // 计算当前请求key值
     const key = getRequestKey(config);
     // console.log(pending,key,checkPending(key),'checkPending(key)')
@@ -90,6 +91,7 @@ service.interceptors.response.use(
     console.log('此时response.config.url为：', response.config.url)
     //请求响应中的config的url会带上代理的api需要去掉
     response.config.url = response.config.url.replace('/api/user', '')
+    console.log('user中，response.config.url为：', response.config.url)
     // 请求完成，删除请求中状态
     const key = getRequestKey(response.config);
     removePending(key);
@@ -129,7 +131,7 @@ service.interceptors.response.use(
       console.log(error, pending, 'error11')
     }
     Message({
-      'message': error.message,
+      'message': 'error回调函数中，'+error.message,
       'type': 'error',
       'duration': 5 * 1000
     })

@@ -133,14 +133,13 @@
       （2）设置距离顶部的位置和高度。
       （3）设置能够覆盖其他组件的较大的z-index值。
       显然element中的Dialog组件已经满足了条件（1）和（3）
-    </p> -->
-    <el-dialog custom-class="shopCart" :visible.sync="shopCartDialogVisible ">
-      <P style="font-size: 40px; color: #000000">
+    </p>  -->
+    <el-dialog custom-class="shopCart" :visible.sync="shopCartDialogVisible">
+      <P class="shopCartTitle" style="font-size: 40px; color: #000000">
         <i class=" el-icon-shopping-cart-2">购物车</i>
       </P>
       <div>
-        <el-table key="tab03" :data="shopCart" class="categoryShopCartTable"
-          style=" margin-top:2%;" :stripe="true">
+        <el-table key="tab03" :data="shopCart" class="categoryShopCartTable" style=" margin-top:2%;" :stripe="true">
           <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
@@ -556,26 +555,27 @@ export default {
   由此可以推断出，当第三方组件和自定义的组件（如本文件）都使用了scooped进行样式私有化时，想要在本文件中修改第三方组件，
   就必须得使用样式穿透！
 -->
-<style lang="scss" >
-.category_container{
+<style lang="scss">
+.category_container {
+  // position: absolute; //奇怪的黑屏,算了
   .shopCart {
+    .shopCartTitle {
+      position: sticky; //粘性定位
+      top: 5%;
+      z-index: 3000; // 覆盖Dialog
+    }
+
     position: absolute;
-    width: 80%;//成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
-    top:20%;
-    height: 60%;
+    width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
     left: 15%;
-    bottom: 25%;
+    top: 20%;//尽可能给出top
+    height: 60%;
+    // bottom: 20%;
     overflow: scroll;
   }
 }
 </style>
 <style lang="scss" scoped>
-// 无用，只有直接传给组件才有作用，比如margin-top。
-// .category_container.categoryChoose {
-//   top: 50px;
-//   padding: 40px 50px;
-// }
-
 .category_container {
   // relative:生成相对定位的元素，相对于其正常位置进行定位
   // absolute:生成绝对定位的元素，相对于static定位以外的第一个父元素进行定位，参考https://www.jianshu.com/p/de316853060e
@@ -600,6 +600,7 @@ export default {
     bottom: 50%;
     z-index: 5000;
   }
+
   // 第1个自定义el-footer(共3个)， 优先级最高，因为对应的上class的路径的样式。
   // 编译后为.category_container .el-footer[data-v-1236c9ad]
   .el-footer {
