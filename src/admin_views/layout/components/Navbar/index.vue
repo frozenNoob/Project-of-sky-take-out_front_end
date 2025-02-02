@@ -153,9 +153,10 @@ export default class extends Vue {
   // 添加新订单提示弹窗
   webSocket() {
     const that = this as any
-    //  生成随机生成2个字母或数字的随机数，确保session id尽可能唯一，实际上这里可能并不唯一（如果员工端的人很多的话，使用UUID会更好。）
-    let clientId = Math.random().toString(36).substring(0, 2) //36进制（radix），从0-9，a-z组成的字符串中,挑选前2个字符
-    let socketUrl = process.env.VUE_APP_SOCKET_URL + clientId
+    //  生成随机生成2个字母或数字的随机数，确保session id尽可能唯一，实际上这里可能并不唯一（如果员工端的人很多的话，需要使用UUID。）
+    let clientId = Math.random().toString(36).substring(0, 2) //36进制（radix），从0-9，a-z以及. 组成的字符串中,挑选前2个字符
+    // let socketUrl = process.env.VUE_APP_SOCKET_URL + clientId
+    let socketUrl = '/ws' + clientId;
     console.log(socketUrl, 'socketUrl')
     if (typeof WebSocket == 'undefined') {
       that.$notify({
@@ -200,8 +201,8 @@ export default class extends Vue {
           },
           // 这里也可以把返回信息加入到message中显示
           message: `${jsonMsg.type === 1
-              ? `<span>您有1个<span style=color:#419EFF>订单待处理</span>,${jsonMsg.content},请及时接单</span>`
-              : `${jsonMsg.content}<span style='color:#419EFF;cursor: pointer'>去处理</span>`
+            ? `<span>您有1个<span style=color:#419EFF>订单待处理</span>,${jsonMsg.content},请及时接单</span>`
+            : `${jsonMsg.content}<span style='color:#419EFF;cursor: pointer'>去处理</span>`
             }`,
         })
       }

@@ -1,3 +1,4 @@
+<!-- eslint-disable no-trailing-spaces -->
 <!-- eslint-disable vue/camelcase -->
 <!-- eslint-disable vue/html-closing-bracket-newline -->
 <!-- eslint-disable vue/html-indent -->
@@ -125,60 +126,80 @@
         </el-table-column>
       </el-table>
     </el-main>
+    <!-- <p class="justTestCart">
+      由此可以看出，要固定在下部的且可以实现表格滚动的购物车，需要达成以下条件
 
-    <el-footer style="height: 40% ;max-width: 90%;">
+      （1）需要设置position为absolute。
+      （2）设置距离顶部的位置和高度。
+      （3）设置能够覆盖其他组件的较大的z-index值。
+      显然element中的Dialog组件已经满足了条件（1）和（3）
+    </p> -->
+    <el-dialog custom-class="shopCart" :visible.sync="shopCartDialogVisible ">
       <P style="font-size: 40px; color: #000000">
         <i class=" el-icon-shopping-cart-2">购物车</i>
       </P>
-      <el-table key="tab03" :data="shopCart" class="categoryShopCartTable"
-        style="overflow: scroll; margin-top:2%;position: relative;" :stripe="true">
-        <!-- <el-table-column prop="categoryId" label="类型" width="180">
+      <div>
+        <el-table key="tab03" :data="shopCart" class="categoryShopCartTable"
+          style=" margin-top:2%;" :stripe="true">
+          <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
           </template>
 </el-table-column> -->
-        <el-table-column prop="name" label="商品名称" width="180">
-        </el-table-column>
-        <el-table-column prop="number" label="当前数量">
-        </el-table-column>
-        <el-table-column prop="amount" label="单价（元）">
-        </el-table-column>
-        <el-table-column prop="description" label="描述">
-        </el-table-column>
-        <el-table-column prop="dishFlavor" label="菜品口味">
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button size="mini" type="primary" style="background-color:darkorange;"
-              @click="addToCart(scope.row, 'inCart')">
-              +
-            </el-button>
-            <el-button size="mini" type="danger" @click="deleteFromCart(scope.row)">
-              -
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-table-column prop="name" label="商品名称" width="180">
+          </el-table-column>
+          <el-table-column prop="number" label="当前数量">
+          </el-table-column>
+          <el-table-column prop="amount" label="单价（元）">
+          </el-table-column>
+          <el-table-column prop="description" label="描述">
+          </el-table-column>
+          <el-table-column prop="dishFlavor" label="菜品口味">
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" style="background-color:darkorange;"
+                @click="addToCart(scope.row, 'inCart')">
+                +
+              </el-button>
+              <el-button size="mini" type="danger" @click="deleteFromCart(scope.row)">
+                -
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="shopCartDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="shopCartDialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 如果在这里直接传属性的话，浏览器控制台上便会显示样式element.style 且其优先级最高（排在最前面）-->
+    <el-footer>
       <div class="settlement">
         <p style="font-size: large;">
-          <i class="el-icon-view" style="font-size: 40px">
+          <i class="el-icon-view" style="font-size: 10%">
             当前总价为
           </i>
           <span style="right: 50%;">
             {{ getCartAllAmount() }}元
             <el-button size="medium" type="primary" @click="sumUpShopCart()">
-              <i class="el-icon-sell" style="font-size: 40px">
+              <i class="el-icon-sell">
                 点此结算
               </i>
             </el-button>
           </span>
           <span>
             <el-button size="medium" type="danger" @click="clearAllInShopCart()">
-              <i class="el-icon-delete" style="font-size: 40px">
+              <i class="el-icon-delete">
                 清空购物车
               </i>
             </el-button>
           </span>
+          <el-button type="primary" @click="shopCartDialogVisible = true">
+            <i class=" el-icon-shopping-cart-2">展开购物车</i>
+          </el-button>
         </p>
       </div>
     </el-footer>
@@ -213,6 +234,7 @@ import {
 export default {
   data() {
     return {
+      shopCartDialogVisible: false,
       options: [{
         'value': 1,
         'label': '菜品'
@@ -529,6 +551,24 @@ export default {
 }
 </script>
 
+<!-- 当我设计成scoped的时候，该vue文件中所用到的根元素如category_container以及其中的子组件（子div）
+ 如el-heade中el-select都会直接被data-v-xxxxxxxx标记,无论style块中是否写入新的样式
+  由此可以推断出，当第三方组件和自定义的组件（如本文件）都使用了scooped进行样式私有化时，想要在本文件中修改第三方组件，
+  就必须得使用样式穿透！
+-->
+<style lang="scss" >
+.category_container{
+  .shopCart {
+    position: absolute;
+    width: 80%;//成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
+    top:20%;
+    height: 60%;
+    left: 15%;
+    bottom: 25%;
+    overflow: scroll;
+  }
+}
+</style>
 <style lang="scss" scoped>
 // 无用，只有直接传给组件才有作用，比如margin-top。
 // .category_container.categoryChoose {
@@ -537,33 +577,47 @@ export default {
 // }
 
 .category_container {
+  // relative:生成相对定位的元素，相对于其正常位置进行定位
+  // absolute:生成绝对定位的元素，相对于static定位以外的第一个父元素进行定位，参考https://www.jianshu.com/p/de316853060e
   margin: 30px; //margin 清除周围的（外边框）元素区域。margin 没有背景颜色，是完全透明的。
   background: #f8e1bb;
   z-index: 1;
   width: 100%;
 
+  // 这个无法调整宽度，故放弃
   // .shopCart {
-  //   width: 100%;
-  //   height: 30%;
-  //   left: 0px;
-  //   bottom: 0px;
-  //   padding: auto;
-  //   background: #ef9e1c;
-  //   z-index: 2;
-  // }
-  .el-main {
-    padding-bottom: 25%;
-  }
+  //   position: absolute;
+  //   width: 80%;//调整其他属性有效，而调整宽度无效的问题还是无法解决，有一篇可以解决，但是得出的结果太离谱（https://blog.csdn.net/qq_33241251/article/details/103080671）
+  //   top:20%;
+  //   height: 60%;
+  //   left: 20%;
 
+  //   // bottom: 20%;
+  //   overflow: scroll;
+  // }
+  .justTestCart {
+    position: absolute;
+    bottom: 50%;
+    z-index: 5000;
+  }
   // 第1个自定义el-footer(共3个)， 优先级最高，因为对应的上class的路径的样式。
   // 编译后为.category_container .el-footer[data-v-1236c9ad]
   .el-footer {
     position: fixed; //固定购物车位置
-    height: 40%; //无法覆盖？100%和10%是一样的。推测element-ui源码用了scoped,所以直接传给组件是有效的
+
+    height: 20%; //
     width: 100%; //生效，100%和10%是不一样的。推测源码使用了类似穿透的功能？
     bottom: 0;
     background: #dcbe74;
     z-index: 2;
+
+    .settlement {
+      position: relative;
+      background: #e7b54a;
+      margin: 1%; //前后左右都有
+      // margin-bottom: 2%;//外边距，控制该元素的边界border与周围元素的距离
+      // padding-bottom: 2%;//内边距，控制该元素内部到边界border的距离，比如一个<p>元素中的字体到边界的距离
+    }
 
     // 理论上来说，穿透的时候会直接影响在本文件的同个class的所有用到该第三方库组件的地方
     // 但是这里没用，待解决》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》
@@ -580,14 +634,6 @@ export default {
       top: 0%;
     }*/
 
-    .settlement {
-      background: #e7b54a;
-      position: fixed; //固定后的是没有滚动条的，所以可以通过分页购物车或者弹窗来解决这一显示问题(改变position也没用）。
-      height: 5%;
-      width: 100%;
-      bottom: 0;
-      z-index: 3;
-    }
   }
 }
 
@@ -613,6 +659,7 @@ export default {
 }
 </style>
 <!--无scoped时果， 如果组件没有任何样式可以用（比如第三方私有样式）的话， 可以用全局，虽然会污染-->
+
 <style>
 /* 第3次自定义el-footer 发现注释前2个才能起作用（优先级最低）这个优先级也可以通过F12查看样式的顺序看出（从上到下优先级从高到低）*/
 /*编译后为 .el-footer */

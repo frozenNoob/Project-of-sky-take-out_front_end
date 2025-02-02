@@ -19,7 +19,7 @@ module.exports = {
   },
   // 开启代理，映射到后端的接口
   devServer: {
-    // host和port是指定能够监听，必须包括public,不然会无法访问！！!!!!!!
+    // host和port是指定能够监听的IP地址和端口，必须包括public,不然会无法访问！！!!!!!!
     // '0.0.0.0'表示将devServer监听所有可用的网络接口，即可以通过所有网络接口进行访问，
     // 而不仅限于localhost或127.0.0.1或10.253.1.216
     // host: '0.0.0.0',//表示监听10.253.1.216，这样才能通过这个IP来交流
@@ -45,12 +45,19 @@ module.exports = {
         target: process.env.VUE_APP_URL, //在根目录的.env.development（开发环境）文件下设置后端服务地址
         ws: false,
         secure: false,//非https
-        changeOrigin: true,//设置此就能该改变localhost为后端的私网/公网IP地址，而非环回地址localhost。
+        changeOrigin: true,//设置此就能该改变后端的localhost为后端的私网/公网IP地址，而非环回地址localhost。
         // '^/api'表示匹配到以/api开头的请求路径
         // 表示请求接口时去掉原先的路径
         pathRewrite: {
           '^/api': ''
         }
+      },
+      //
+      '/ws': {
+        target: process.env.VUE_APP_SOCKET_URL,
+        ws: true,
+        secure: false,//非https
+        pathRewrite: { '^/ws': '' }//把以/ws开头的字符串去掉开头的/ws
       }
     }
   },

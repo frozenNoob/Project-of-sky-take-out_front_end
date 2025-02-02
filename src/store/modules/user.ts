@@ -1,6 +1,6 @@
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import { login,userLogout } from '@/api/employee'
-import { getToken, setToken, removeToken,getStoreId, setStoreId, removeStoreId, setUserInfo, getUserInfo, removeUserInfo } from '@/utils/cookies'
+import { login, userLogout } from '@/api/employee'
+import { getToken, setToken, removeToken, getStoreId, setStoreId, removeStoreId, setUserInfo, getUserInfo, removeUserInfo } from '@/utils/cookies'
 import store from '@/store'
 import Cookies from 'js-cookie'
 import { Message } from 'element-ui'
@@ -61,11 +61,15 @@ class User extends VuexModule implements IUserState {
   private SET_STOREID(storeId: string) {
     this.storeId = storeId
   }
+  // 来自D:\ALL_projects_for_job_of_java\苍穹外卖参考资料\讲义\讲义\前端讲义\day01\day01-vue进阶.md
+  // 注：mutations中定义的函数不能直接调用，必须通过状态对象的 commit 方法来调用
+  // 第六步：如果在修改共享数据的过程中有异步操作，则需要将异步操作的代码编写在actions的函数中
+  // Mutation只能适用同步的，
   @Mutation
   private SET_USERNAME(name: string) {
     this.username = name
-    }
-
+  }
+  // Action可以调用异步的
   @Action
   public async Login(userInfo: { username: string, password: string }) {
     let { username, password } = userInfo
@@ -92,7 +96,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  public ResetToken () {
+  public ResetToken() {
     removeToken()
     this.SET_TOKEN('')
     this.SET_ROLES([])
@@ -107,7 +111,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  public async GetUserInfo () {
+  public async GetUserInfo() {
     if (this.token === '') {
       throw Error('GetUserInfo: token is undefined!')
     }
@@ -117,7 +121,7 @@ class User extends VuexModule implements IUserState {
       throw Error('Verification failed, please Login again.')
     }
 
-    const { roles, name, avatar, introduction, applicant, storeManagerName, storeId='' } = data // data.user
+    const { roles, name, avatar, introduction, applicant, storeManagerName, storeId = '' } = data // data.user
     // roles must be a non-empty array
     if (!roles || roles.length <= 0) {
       throw Error('GetUserInfo: roles must be a non-null array!')
@@ -131,7 +135,7 @@ class User extends VuexModule implements IUserState {
   }
 
   @Action
-  public async LogOut () {
+  public async LogOut() {
     const { data } = await userLogout({})
     removeToken()
     this.SET_TOKEN('')
