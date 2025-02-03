@@ -6,17 +6,19 @@
 <template>
   <el-container class="category_container">
     <el-header class="categoryChoose" style="margin-top: 20px;">
-      <el-select v-model="type" placeholder="请选择套餐或/和菜品" style="margin-right: 20px;" @change="lookCategory(type)">
+      <el-select v-model="type" clearable placeholder="请选择套餐或/和菜品" style="margin-right: 20px;" @change="lookCategory(type)">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="categoryId" placeholder="请选择分类" @change="lookMenuByCategoryId(categoryId, type)">
+      <el-select v-model="categoryId" clearable :placeholder="categoryNameInSelect"
+        @change="lookMenuByCategoryId(categoryId, type)">
         <el-option v-for="item in categoryListOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </el-header>
     <el-main style="height: 40%;">
-      <el-table key="tab01" :data="menu" :stripe="true">
+      <!-- 只要在el-table元素中定义了height属性，即可实现固定表头的表格，而不需要额外的代码。 -->
+      <el-table key="tab01" height="700" :data="menu" :stripe="true">
         <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
@@ -135,11 +137,12 @@
       显然element中的Dialog组件已经满足了条件（1）和（3）
     </p>  -->
     <el-dialog custom-class="shopCart" :visible.sync="shopCartDialogVisible">
-      <P class="shopCartTitle" style="font-size: 40px; color: #000000">
+      <P class="shopCartTitle">
         <i class=" el-icon-shopping-cart-2">购物车</i>
       </P>
       <div>
-        <el-table key="tab03" :data="shopCart" class="categoryShopCartTable" style=" margin-top:2%;" :stripe="true">
+        <el-table key="tab03" :data="shopCart" class="categoryShopCartTable" height="300" style="margin-top:2%;"
+          :stripe="true">
           <!-- <el-table-column prop="categoryId" label="类型" width="180">
           <template slot-scope="scope">
             {{ scope.row.categoryId == 1 ? "菜品" : "套餐" }}
@@ -234,6 +237,7 @@ export default {
   data() {
     return {
       shopCartDialogVisible: false,
+      // categoryNameInSelect: '请选择分类',
       options: [{
         'value': 1,
         'label': '菜品'
@@ -311,10 +315,18 @@ export default {
       menuRowForSetmeal: [],
     }
   },
+
+  // placeholder文字根据条件生成
+  computed: {
+    categoryNameInSelect() {
+      return this.menu.length ? '请选择分类' : '请选择套餐或菜品'
+    }
+  },
   mounted() {
     this.lookCategory(3);//默认查看所有套餐和菜品
     this.lookCart();//查看购物车
   },
+
   methods: {
     async clearAllInShopCart() {
       await deleteAllInShopCart();
@@ -391,6 +403,7 @@ export default {
     },
     // 根据value查看菜单种类（菜品或/和套餐）,实现菜品浏览
     async lookCategory(type) {
+      // this.categoryNameInSelect = '请选择分类';//bind绑定属性之后，无法动态更新？被固定了，如何做到的？通过绑定computed中的函数也无法解决这一问题。
       // 查询分类
       if (type == 1 || type == 2) {
         var response = await lookCategoryByType(type);
@@ -427,6 +440,16 @@ export default {
             label: '请先选择套餐或菜品'
           }
         ]
+        this.$message({
+          message: '选择分类前，请先选择菜品或者套餐',
+          showClose: true,
+          type: 'warning',
+        })
+        // this.$notify({
+        //   message: '选择分类前，请先选择菜品或者套餐',
+        //   showClose: true,
+        //   type: 'warning',
+        // })
         // console.log('商品浏览对象\n', this.menu);
       }
     },
@@ -557,21 +580,33 @@ export default {
 -->
 <style lang="scss">
 .category_container {
+
   // position: absolute; //奇怪的黑屏,算了
   .shopCart {
-    .shopCartTitle {
-      position: sticky; //粘性定位
-      top: 5%;
-      z-index: 3000; // 覆盖Dialog
-    }
 
     position: absolute;
     width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
     left: 15%;
-    top: 20%;//尽可能给出top
+    top: 20%; //尽可能给出top
     height: 60%;
     // bottom: 20%;
     overflow: scroll;
+    // overflow: visible;//el-dialog默认自带的便是这个
+
+    .categoryShopCartTable {
+      // height: 250;//这个height是组件style属性中的height，即style="height: 300;"
+      // 而非直接传入的height="300"
+      margin-top: 2%;
+    }
+
+    .shopCartTitle {
+      position: sticky; //粘性定位
+      font-size: 40px;
+      color: #000000;
+      top: 5%;
+      z-index: 3000; // 覆盖Dialog
+    }
+
   }
 }
 </style>

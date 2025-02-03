@@ -59,6 +59,7 @@ service.interceptors.request.use(
       config.params = {};
       config.url = url;
     }
+    /*
     console.log('user中，request的url为：', config.url)
     // 计算当前请求key值
     const key = getRequestKey(config);
@@ -72,10 +73,12 @@ service.interceptors.request.use(
       // 加入请求字典
       pending[key] = true;
     }
+    */
     return config
   },
   (error: any) => {
-    Promise.reject(error)
+    console.log('request的拦截器中，error为：', error);
+    return Promise.reject(error)
   }
 )
 
@@ -88,6 +91,7 @@ service.interceptors.response.use(
       // const res = response.data
       // return response
     }
+    /*
     console.log('此时response.config.url为：', response.config.url)
     //请求响应中的config的url会带上代理的api需要去掉
     response.config.url = response.config.url.replace('/api/user', '')
@@ -107,6 +111,7 @@ service.interceptors.response.use(
       Message.error('响应的自定义码错误');
       // console.info('响应的自定义码错误');
     }
+      */
     return response
   },
   (error: any) => {
@@ -120,21 +125,21 @@ service.interceptors.response.use(
           error.message = '请求错误'
       }
     }
-    if (error.config) {
-      //请求响应中的config的url会带上代理的api需要去掉
-      // /api/user/order/statistics变为/order/statistics以对应上service.interceptors.request中的不包括baseUrl的用法。
-      error.config.url = error.config.url.replace('/api/user', '')
-      // 请求完成，删除请求中状态
-      const key = getRequestKey(error.config);
-      removePending(key);
-      console.log('出现error后，checkPending(key)为', checkPending(key));
-      console.log(error, pending, 'error11')
-    }
-    Message({
-      'message': 'error回调函数中，'+error.message,
-      'type': 'error',
-      'duration': 5 * 1000
-    })
+    // if (error.config) {
+    //   //请求响应中的config的url会带上代理的api需要去掉
+    //   // /api/user/order/statistics变为/order/statistics以对应上service.interceptors.request中的不包括baseUrl的用法。
+    //   error.config.url = error.config.url.replace('/api/user', '')
+    //   // 请求完成，删除请求中状态
+    //   const key = getRequestKey(error.config);
+    //   removePending(key);
+    //   console.log('出现error后，checkPending(key)为', checkPending(key));
+    //   console.log(error, pending, 'error11')
+    // }
+    // Message({
+    //   'message': 'error回调函数中，'+error.message,
+    //   'type': 'error',
+    //   'duration': 5 * 1000
+    // })
     // router.push('/')
 
     // 将未处理的异常往外抛，即已拒绝（rejected）的 Promise 对象，拒绝原因为给定的参数。

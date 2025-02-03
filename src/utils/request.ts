@@ -57,6 +57,7 @@ service.interceptors.request.use(
     console.log('此时请求的url为,', config.url);//这个url是不包括baseUrl的，比如/api/admin/order/statistics去掉前面的/api/admin
     // 计算当前请求key值
     const key = getRequestKey(config);
+    /*
     // console.log(pending,key,checkPending(key),'checkPending(key)')
     if (checkPending(key)) {
       // 重复请求则取消当前请求
@@ -69,6 +70,7 @@ service.interceptors.request.use(
       // 加入请求字典
       pending[key] = true;
     }
+      */
     return config
   },
   (error: any) => {
@@ -86,6 +88,7 @@ service.interceptors.response.use(
       // const res = response.data
       // return response
     }
+    /*
     console.log('此时response.config.url为：', response.config.url)
     //请求响应中的config的url会带上代理的api需要去掉
     response.config.url = response.config.url.replace('/api/admin', '')
@@ -93,6 +96,7 @@ service.interceptors.response.use(
     const key = getRequestKey(response.config);
     removePending(key);
     console.log('response后，checkPending(key)为', checkPending(key));
+    */
     console.log('response后，自定义的状态码response.data.code为：', response.data.code);
     if (response.data.code === 0) {
       Message.error(response.data.msg)
@@ -120,6 +124,7 @@ service.interceptors.response.use(
           error.message = '请求错误'
       }
     }
+    /*
     // 直接访问对象为undefined的，是不会error的。
     console.log('error.config如下：', error.config);
     // 如果访问对象为undefined的属性，那么就会直接出现error，直接中断该函数的进行！！
@@ -143,7 +148,7 @@ service.interceptors.response.use(
     })
     console.log('error处理已经结束');
     // router.push('/')
-
+    */
     // 将未处理的异常往外抛，即已拒绝（rejected）的 Promise 对象，拒绝原因为给定的参数。
     return Promise.reject(error)
   }
