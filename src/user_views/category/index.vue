@@ -6,11 +6,11 @@
 <template>
   <el-container class="category_container">
     <el-header class="categoryChoose" style="margin-top: 20px;">
-      <el-select v-model="type" clearable placeholder="请选择套餐或/和菜品" style="margin-right: 20px;" @change="lookCategory(type)">
+      <el-select v-model="type" placeholder="请选择套餐或/和菜品" style="margin-right: 20px;" @change="lookCategory(type)">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="categoryId" clearable :placeholder="categoryNameInSelect"
+      <el-select v-model="categoryId" :placeholder="categoryNameInSelect"
         @change="lookMenuByCategoryId(categoryId, type)">
         <el-option v-for="item in categoryListOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
@@ -53,7 +53,7 @@
                   {{ dishFlavorDialogData.name }}
                 </el-form-item>
                 <el-form-item label="选择口味">
-                  <el-select v-if="existFlavor('甜味')" v-model="dishFlavorFirstItem" placeholder="甜味"
+                  <el-select v-if="existFlavor('甜味')" v-model="dishFlavorFirstItem"
                     @change="addOneItemToFlavors('甜味', dishFlavorFirstItem)">
                     <el-option v-for="item in getFlavorOptions('甜味')" :key="item" :label="item" :value="item">
                     </el-option>
@@ -171,7 +171,6 @@
           </el-table-column>
         </el-table>
       </div>
-
       <span slot="footer" class="dialog-footer">
         <el-button @click="shopCartDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="shopCartDialogVisible = false">确 定</el-button>
@@ -283,19 +282,19 @@ export default {
         'image': '',
       }],
       dialogFormVisible_for_add_dish_to_cart: false,//添加菜品到购物车,套餐不需要此表
-      // flavor flavorData
-      dishFlavorsData: [
-        { name: '甜味', value: ['无糖', '少糖', '半糖', '多糖', '全糖'] },
-        { name: '温度', value: ['热饮', '常温', '去冰', '少冰', '多冰'] },
-        { name: '忌口', value: ['不要葱', '不要蒜', '不要香菜', '不要辣'] },
-        { name: '辣度', value: ['不辣', '微辣', '中辣', '重辣'] }
-      ],
+      // // flavor flavorData
+      // dishFlavorsData: [
+      //   { name: '甜味', value: ['无糖', '少糖', '半糖', '多糖', '全糖'] },
+      //   { name: '温度', value: ['热饮', '常温', '去冰', '少冰', '多冰'] },
+      //   { name: '忌口', value: ['不要葱', '不要蒜', '不要香菜', '不要辣'] },
+      //   { name: '辣度', value: ['不辣', '微辣', '中辣', '重辣'] }
+      // ],
       // 展示菜品选择，查询菜品味道等信息
       dishFlavorDialogData: {
         'name': '',
         'image': '',
         'description': '',
-        'flavors': [],//实际上没有用到这个
+        'flavors': [],
       },
       dishFlavorFirstItem: '甜度',
       dishFlavorSecondItem: '温度',
@@ -374,25 +373,31 @@ export default {
     },
     getFlavorOptions(flavorName: string) {
       var dishFlavorsIndex = {};
-      for (let i = 0; i < this.dishFlavorsData.length; ++i) {
-        var dfd = this.dishFlavorsData[i].name;
+      let judgeFlavorExist = false;
+      let flavors = this.dishFlavorDialogData.flavors;
+      for (let i = 0; i < flavors.length; ++i) {
+        var dfd = flavors[i].name;
+        if (dfd == flavorName) {
+          judgeFlavorExist = true;
+        }
         dishFlavorsIndex[dfd] = i;
       }
-      return this.dishFlavorsData[dishFlavorsIndex[flavorName]].value;
+      // 事实上，在v-if中判断为false后就不会进入下一步了，所以这个是无用的
+      // if(!judgeFlavorExist){
+      //   return ['不存在该口味'];
+      // }
+      let listArray = flavors[dishFlavorsIndex[flavorName]].value;
+      return listArray;
     },
     addOneItemToFlavors(key: string, oneItem: string) {
       if (this.dishFlavor == null) {
         //新建之后再赋值，防止报错。而不能直接对空的对象（会被认为是undefined)赋值或push增加元素，比如不能this.dishFlavors[key]=value
         var dishFlavor = {};
-        // data中非空属性可以直接赋值
-        // this.dishFlavorsData[key] = oneItem;
-        // console.log(this.dishFlavorsData);
         dishFlavor[key] = oneItem;//新增
         this.dishFlavor = dishFlavor;
       } else {
         this.dishFlavor[key] = oneItem;//新增或更新
       }
-      console.log('添加口味后', this.dishFlavor);
     },
     setMenu(response, type) {
       var menu = response.data.data;
@@ -471,9 +476,38 @@ export default {
         if (way == 'inMenu') {
           //直接引用（节省内存消耗），其实这里可以只提取其中部分所需属性，这样可以防止之后可能的修改，但是会因为拷贝（比如浅拷贝...）耗更多内存。
           this.dishFlavorDialogData = menuRow;
-          // 口味编辑表单
-          this.visualDishFlavorDialog = true;
-          console.log('在Dialog被关闭前，后续指令会继续执行，所以这里把函数放到Dialog的确认键中');
+          var flavors = this.dishFlavorDialogData.flavors;
+          // 遍历菜品自己规定好的口味
+          for (let i = 0; i < flavors.length; ++i) {
+            // 解析后端返回的字符串为列表
+            if (typeof (flavors[i].value) == 'string') {
+              flavors[i].value = JSON.parse(flavors[i].value);
+            }
+
+            let flavorName = flavors[i].name;
+            // 添加菜品自己规定好的口味
+            if (flavorName == '甜味') {
+              this.dishFlavorFirstItem = flavors[i].value[0];// 这里默认取某种口味的第一项，可能是甜味中的无糖或半塘
+            } else if (flavorName == '温度') {
+              this.dishFlavorSecondItem = flavors[i].value[0];
+            } else if (flavorName == '忌口') {
+              this.dishFlavorThirdItem = flavors[i].value[0];
+            } else if (flavorName == '辣度') {
+              this.dishFlavorFourthItem = flavors[i].value[0];
+            } else {
+              this.$message({
+                message: '试图使用不存在的口味',
+                showClose: true,
+                type: 'error',
+              })
+            }
+            console.log('默认的口味为：', this.dishFlavor);
+            // 添加默认的口味
+            this.addOneItemToFlavors(flavorName, flavors[i].value[0]);
+            // 口味编辑表单
+            this.visualDishFlavorDialog = true;
+            console.log('在Dialog被关闭前，后续指令会继续执行，所以这里把函数放到Dialog的确认键中');
+          }
         } else { //inCart
           this.addDishToShopCart(menuRow, way);
         }
@@ -510,7 +544,7 @@ export default {
       var dishFlavor;
       console.log('this.dishFlavor', this.dishFlavor);
       if (way == 'inMenu') {
-        dishFlavor = JSON.stringify(this.dishFlavor);//需要转成字符串
+        dishFlavor = JSON.stringify(this.dishFlavor);//需要转成JSON字符串
         console.log('inMenu, dishFlavor', dishFlavor);
       } else { //inCart
         dishFlavor = menuRow.dishFlavor;//已经是字符串
@@ -525,12 +559,14 @@ export default {
       this.visualDishFlavorDialog = false;
       this.lookCart();//刷新购物车
     },
-    existFlavor(flavor) {
+    existFlavor(predictFlavor) {
       var flavors = this.dishFlavorDialogData.flavors;
       // console.log('flavors is ', flavors);
-      // for-each函数没有返回值，这一点需要注意！所以这里使用for
+      // 遍历菜品自己规定好的口味
       for (let i = 0; i < flavors.length; ++i) {
-        if (flavors[i].name == flavor) {
+        let flavorName = flavors[i].name;
+        // 找到存在的口味
+        if (flavorName == predictFlavor) {
           return true;
         }
       }
@@ -584,19 +620,14 @@ export default {
   // position: absolute; //奇怪的黑屏,算了
   .shopCart {
 
-    position: absolute;
-    width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
-    left: 15%;
-    top: 20%; //尽可能给出top
-    height: 60%;
-    // bottom: 20%;
-    overflow: scroll;
-    // overflow: visible;//el-dialog默认自带的便是这个
-
     .categoryShopCartTable {
-      // height: 250;//这个height是组件style属性中的height，即style="height: 300;"
-      // 而非直接传入的height="300"
+      //这个height是直接传给组件的style属性中的height（如果不加的话就是overflow: visible），即style="height: 300;"会固定表头，为表中内容添加scroll属性
+      // height: 250;
       margin-top: 2%;
+
+      //el-table添加第三方的height属性后会为固定表头，自带滚动；
+      // 加上这个后（就算去掉固定表头也会）反而多上一段只能看到而无法使用的滚动条（猜测这是el-table固定了某些东西导致的）
+      // overflow: scroll;
     }
 
     .shopCartTitle {
@@ -607,6 +638,14 @@ export default {
       z-index: 3000; // 覆盖Dialog
     }
 
+    position: absolute;
+    width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
+    left: 15%;
+    top: 20%; //尽可能给出top
+    height: 60%;
+    // bottom: 20%;
+    overflow: scroll; //这个是有效的滚动条！
+    // overflow: visible;//overflow默认值
   }
 }
 </style>
