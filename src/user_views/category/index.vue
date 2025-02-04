@@ -10,7 +10,7 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="categoryId" :placeholder="categoryNameInSelect"
+      <el-select v-model="categoryId"
         @change="lookMenuByCategoryId(categoryId, type)">
         <el-option v-for="item in categoryListOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
@@ -236,7 +236,7 @@ export default {
   data() {
     return {
       shopCartDialogVisible: false,
-      // categoryNameInSelect: '请选择分类',
+      categoryNameInSelect: '请选择分类',
       options: [{
         'value': 1,
         'label': '菜品'
@@ -258,7 +258,7 @@ export default {
       // type为1表示菜品分类，2表示套餐分类
       type: '',
       // 根据ID查询套餐或菜品
-      categoryId: '',
+      categoryId: '请选择分类',
       // 商品浏览
       menu: [{
         'id': 0, //套餐或菜品ID
@@ -315,12 +315,6 @@ export default {
     }
   },
 
-  // placeholder文字根据条件生成
-  computed: {
-    categoryNameInSelect() {
-      return this.menu.length ? '请选择分类' : '请选择套餐或菜品'
-    }
-  },
   mounted() {
     this.lookCategory(3);//默认查看所有套餐和菜品
     this.lookCart();//查看购物车
@@ -408,7 +402,8 @@ export default {
     },
     // 根据value查看菜单种类（菜品或/和套餐）,实现菜品浏览
     async lookCategory(type) {
-      // this.categoryNameInSelect = '请选择分类';//bind绑定属性之后，无法动态更新？被固定了，如何做到的？通过绑定computed中的函数也无法解决这一问题。
+      //this.categoryNameInSelect = '请选择分类';//bind绑定属性之后，无法动态更新？被固定了，如何做到的？通过绑定computed中的函数也无法解决这一问题。
+      this.categoryId = '请选择分类';
       // 查询分类
       if (type == 1 || type == 2) {
         var response = await lookCategoryByType(type);
