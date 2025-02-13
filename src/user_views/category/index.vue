@@ -53,24 +53,18 @@
                   {{ dishFlavorDialogData.name }}
                 </el-form-item>
                 <el-form-item label="选择口味">
-                  <el-select v-if="existFlavor('甜味')" v-model="dishFlavorFirstItem"
-                    @change="addOneItemToFlavors('甜味', dishFlavorFirstItem)">
-                    <el-option v-for="item in getFlavorOptions('甜味')" :key="item" :label="item" :value="item">
-                    </el-option>
-                  </el-select>
-                  <el-select v-if="existFlavor('温度')" v-model="dishFlavorSecondItem" placeholder="温度"
-                    @change="addOneItemToFlavors('温度', dishFlavorSecondItem)">
-                    <el-option v-for="item in getFlavorOptions('温度')" :key="item" :label="item" :value="item">
-                    </el-option>
-                  </el-select>
-                  <el-select v-if="existFlavor('忌口')" v-model="dishFlavorThirdItem" placeholder="忌口"
-                    @change="addOneItemToFlavors('忌口', dishFlavorThirdItem)">
-                    <el-option v-for="item in getFlavorOptions('忌口')" :key="item" :label="item" :value="item">
-                    </el-option>
-                  </el-select>
-                  <el-select v-if="existFlavor('辣度')" v-model="dishFlavorFourthItem" placeholder="辣度"
-                    @change="addOneItemToFlavors('辣度', dishFlavorFourthItem)">
-                    <el-option v-for="item in getFlavorOptions('辣度')" :key="item" :label="item" :value="item">
+                  <el-select 
+                    v-for="(flavor, index) in flavorTypes"
+                    :key="flavor.name"
+                    v-if="existFlavor(flavor.name)"
+                    v-model="dishFlavorItems[index]"
+                    :placeholder="flavor.placeholder"
+                    @change="addOneItemToFlavors(flavor.name, dishFlavorItems[index])">
+                    <el-option 
+                      v-for="item in getFlavorOptions(flavor.name)"
+                      :key="item"
+                      :label="item"
+                      :value="item">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -403,7 +397,7 @@ export default {
     // 根据value查看菜单种类（菜品或/和套餐）,实现菜品浏览
     async lookCategory(type) {
       //this.categoryNameInSelect = '请选择分类';//bind绑定属性之后，无法动态更新？被固定了，如何做到的？通过绑定computed中的函数也无法解决这一问题。
-      this.categoryId = '请选择分类';
+      this.categoryId = '请选择分类';//在选择‘套餐或/和菜品’时，刷新分类提示信息
       // 查询分类
       if (type == 1 || type == 2) {
         var response = await lookCategoryByType(type);
