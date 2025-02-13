@@ -10,8 +10,7 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="categoryId"
-        @change="lookMenuByCategoryId(categoryId, type)">
+      <el-select v-model="categoryId" @change="lookMenuByCategoryId(categoryId, type)">
         <el-option v-for="item in categoryListOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -610,10 +609,59 @@ export default {
   就必须得使用样式穿透！
 -->
 <style lang="scss">
-.category_container {
+// .category_container {
 
-  // position: absolute; //奇怪的黑屏,算了
-  .shopCart {
+//   // position: absolute; //奇怪的黑屏,算了
+//   .shopCart {
+
+//     position: absolute;
+//     width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
+//     left: 15%;
+//     top: 20%; //尽可能给出top
+//     height: 60%;
+//     // bottom: 20%;
+//     overflow: scroll; //这个是有效的滚动条！
+//     // overflow: visible;//overflow默认值
+
+//     .categoryShopCartTable {
+//       //这个height是直接传给组件的style属性中的height（如果不加的话就是overflow: visible），即style="height: 300;"会固定表头，为表中内容添加scroll属性
+//       // height: 250;
+//       margin-top: 2%;
+
+//       //el-table添加第三方的height属性后会为固定表头，自带滚动；
+//       // 加上这个后（就算去掉固定表头也会）反而多上一段只能看到而无法使用的滚动条（猜测这是el-table固定了某些东西导致的）
+//       // overflow: scroll;
+//     }
+
+//     .shopCartTitle {
+//       position: sticky; //粘性定位
+//       font-size: 40px;
+//       color: #000000;
+//       top: 5%;
+//       z-index: 3000; // 覆盖Dialog
+//     }
+
+// }</style>
+<style lang="scss" scoped>
+.category_container {
+  // relative:生成相对定位的元素，相对于其正常位置进行定位
+  // absolute:生成绝对定位的元素，相对于static定位以外的第一个父元素进行定位，参考https://www.jianshu.com/p/de316853060e
+  margin: 30px; //margin 清除周围的（外边框）元素区域。margin 没有背景颜色，是完全透明的。
+  background: #f8e1bb;
+  z-index: 1;
+  width: 100%;
+
+  // 这个无法调整宽度，故放弃
+  ::v-deep .shopCart {
+
+    position: absolute;
+    width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
+    left: 15%;
+    top: 20%; //尽可能给出top
+    height: 60%;
+    // bottom: 20%;
+    overflow: scroll; //这个是有效的滚动条！
+    // overflow: visible;//overflow默认值
 
     .categoryShopCartTable {
       //这个height是直接传给组件的style属性中的height（如果不加的话就是overflow: visible），即style="height: 300;"会固定表头，为表中内容添加scroll属性
@@ -633,37 +681,8 @@ export default {
       z-index: 3000; // 覆盖Dialog
     }
 
-    position: absolute;
-    width: 80%; //成功调整宽度，参考（https://blog.csdn.net/qq_33241251/article/details/103080671）
-    left: 15%;
-    top: 20%; //尽可能给出top
-    height: 60%;
-    // bottom: 20%;
-    overflow: scroll; //这个是有效的滚动条！
-    // overflow: visible;//overflow默认值
   }
-}
-</style>
-<style lang="scss" scoped>
-.category_container {
-  // relative:生成相对定位的元素，相对于其正常位置进行定位
-  // absolute:生成绝对定位的元素，相对于static定位以外的第一个父元素进行定位，参考https://www.jianshu.com/p/de316853060e
-  margin: 30px; //margin 清除周围的（外边框）元素区域。margin 没有背景颜色，是完全透明的。
-  background: #f8e1bb;
-  z-index: 1;
-  width: 100%;
 
-  // 这个无法调整宽度，故放弃
-  // .shopCart {
-  //   position: absolute;
-  //   width: 80%;//调整其他属性有效，而调整宽度无效的问题还是无法解决，有一篇可以解决，但是得出的结果太离谱（https://blog.csdn.net/qq_33241251/article/details/103080671）
-  //   top:20%;
-  //   height: 60%;
-  //   left: 20%;
-
-  //   // bottom: 20%;
-  //   overflow: scroll;
-  // }
   .justTestCart {
     position: absolute;
     bottom: 50%;
