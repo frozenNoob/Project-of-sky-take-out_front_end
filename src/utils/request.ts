@@ -35,13 +35,24 @@ service.interceptors.request.use(
     // get请求映射params参数
     if (config.method === 'get' && config.params) {
       var url = config.url + '?';
-      for (const propName of Object.keys(config.params)) {
-        const value = config.params[propName];
+      let exampleParams =
+      {
+        'file': {
+          'file1': 1,
+          'file2': 2
+        }
+        ,
+      }
+      for (const propName of Object.keys(config.params)) { //file
+        const value = config.params[propName]; //{}
         var part = encodeURIComponent(propName) + '=';//如果值为空的话就后面不会拼接到url里面！
         if (value !== null && typeof (value) !== 'undefined') {
           if (typeof value === 'object') {
-            for (const key of Object.keys(value)) {
-              let params = propName + '[' + key + ']';
+            for (const key of Object.keys(value)) { // file1
+              ////////////////////////////////////////////////////////////
+              let params = propName + '[' + key + ']';// file[file1]，但是事实上，这种拼接方式后端SpringBoost是无法识别的，需要是file.file1这种才能正常识别！！
+              params = propName + '.' + key;
+              ////////////////////////////////////////////////////////////
               var subPart = encodeURIComponent(params) + '=';
               url += subPart + encodeURIComponent(value[key]) + '&';
             }
