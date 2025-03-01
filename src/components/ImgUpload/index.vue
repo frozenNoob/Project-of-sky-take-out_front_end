@@ -5,7 +5,7 @@
                :accept="type"
                :class="{ borderNone: imageUrl }"
                class="avatar-uploader"
-               action="/api/common/upload"
+               action="/api/admin/common/upload"
                :show-file-list="false"
                :on-success="handleAvatarSuccess"
                :on-remove="handleRemove"

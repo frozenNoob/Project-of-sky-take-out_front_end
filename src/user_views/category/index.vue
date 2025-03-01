@@ -52,20 +52,13 @@
                   {{ dishFlavorDialogData.name }}
                 </el-form-item>
                 <el-form-item label="选择口味">
-                  <el-select 
-                    v-for="(flavor, index) in flavorTypes"
-                    :key="flavor.name"
-                    v-if="existFlavor(flavor.name)"
-                    v-model="dishFlavorItems[index]"
-                    :placeholder="flavor.placeholder"
-                    @change="addOneItemToFlavors(flavor.name, dishFlavorItems[index])">
-                    <el-option 
-                      v-for="item in getFlavorOptions(flavor.name)"
-                      :key="item"
-                      :label="item"
-                      :value="item">
-                    </el-option>
-                  </el-select>
+                  <template v-for="(flavorName, index) in flavorTypes">
+                    <el-select v-if="existFlavor(flavorName)" :key="flavorName" v-model="dishFlavorItems[index]"
+                      @change="addOneItemToFlavors(flavorName, dishFlavorItems[index])">
+                      <el-option v-for="item in getFlavorOptions(flavorName)" :key="item" :label="item" :value="item">
+                      </el-option>
+                    </el-select>
+                  </template>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="addDishToShopCart(dishFlavorDialogData, 'inMenu')">
@@ -289,10 +282,14 @@ export default {
         'description': '',
         'flavors': [],
       },
-      dishFlavorFirstItem: '甜度',
-      dishFlavorSecondItem: '温度',
-      dishFlavorThirdItem: '忌口',
-      dishFlavorFourthItem: '辣度',
+      dishFlavorItems: ['甜度', '温度', '忌口', '辣度'],//变量
+      flavorTypes: ['甜度', '温度', '忌口', '辣度'],//常量
+      flavorDict: { //对应其下标即可
+        '甜度': 0,
+        '温度': 1,
+        '忌口': 2,
+        '辣度': 3
+      },
       dishFlavor: {}, //所有味道的字典
       visualDishFlavorDialog: false,//添加味道
       visualSetmealDialog: false, //添加套餐时查询所含菜品
@@ -473,22 +470,9 @@ export default {
             }
 
             let flavorName = flavors[i].name;
+            console.log('此时序号为', this.flavorDict[flavorName]);
             // 添加菜品自己规定好的口味
-            if (flavorName == '甜味') {
-              this.dishFlavorFirstItem = flavors[i].value[0];// 这里默认取某种口味的第一项，可能是甜味中的无糖或半塘
-            } else if (flavorName == '温度') {
-              this.dishFlavorSecondItem = flavors[i].value[0];
-            } else if (flavorName == '忌口') {
-              this.dishFlavorThirdItem = flavors[i].value[0];
-            } else if (flavorName == '辣度') {
-              this.dishFlavorFourthItem = flavors[i].value[0];
-            } else {
-              this.$message({
-                message: '试图使用不存在的口味',
-                showClose: true,
-                type: 'error',
-              })
-            }
+            this.dishFlavorItems[this.flavorDict[flavorName]] = flavors[i].value[0]// 这里默认取某种口味的第一项，可能是甜味中的无糖或半塘
             console.log('默认的口味为：', this.dishFlavor);
             // 添加默认的口味
             this.addOneItemToFlavors(flavorName, flavors[i].value[0]);
@@ -555,6 +539,7 @@ export default {
         let flavorName = flavors[i].name;
         // 找到存在的口味
         if (flavorName == predictFlavor) {
+          console.log('存在口味', flavorName)
           return true;
         }
       }
