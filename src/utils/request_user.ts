@@ -24,13 +24,13 @@ service.interceptors.request.use(
     // console.log(config, 'config')
     // config.data = config.params
     // Add X-Access-Token header to every request, you can add other custom headers here
-    let token = localStorage.getItem('token')
-    if (token) {
-      config.headers['token'] = token
+    let authentication = localStorage.getItem('authentication')
+    if (authentication) {
+      config.headers['authentication'] = authentication
     } else {
-      console.log('用户端未找到token');
+      console.log('用户端未找到authentication');
     }
-    // else if (token && config.url != '/') {
+    // else if (authentication && config.url != '/') {
     //   window.location.href = '/'
     //   return false
     // }
@@ -68,7 +68,7 @@ service.interceptors.request.use(
     if (checkPending(key)) {
       // 重复请求则取消当前请求
       const source = CancelToken.source();
-      config.cancelToken = source.token;
+      config.cancelToken = source.authentication;
       source.cancel('这是一次重复请求');
     } else {
       // 加入请求字典

@@ -29,7 +29,7 @@ const router = new Router({
   routes: [
     {
       path: "/",
-      redirect: "/admin/login", //初始登录页面重定向到员工登录页面
+      redirect: "/user/login", //初始登录页面重定向到员工登录页面
     },
     {
       path: "/admin/login",

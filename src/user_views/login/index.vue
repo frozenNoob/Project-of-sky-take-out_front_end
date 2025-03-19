@@ -93,7 +93,7 @@ export default class extends Vue {
         if (response.data.code == '1') {
           console.log('POST 请求成功', response.data);
           //用户端是存储到浏览器的localStorage，而管理员（员工端）是存储到cookie中的，注意区分
-          localStorage.setItem('token', response.data.data.token);
+          localStorage.setItem('authentication', response.data.data.token);
           this.$router.push('/user') //登录成功，重定向到用户起始界面
         }else {
           console.log('登录失败');
@@ -108,7 +108,7 @@ export default class extends Vue {
         //     if(response.data.code == '1'){
         //       console.log('POST 请求成功', response.data);
         //       //用户端是存储到浏览器的localStorage，而管理员（员工端）是存储到cookie中的，注意区分
-        //       localStorage.setItem('token', response.data.data.token);
+        //       localStorage.setItem('authentication', response.data.data.token);
         //       this.$router.push('/user') //登录成功，重定向到用户起始界面
         //     }
         //   })

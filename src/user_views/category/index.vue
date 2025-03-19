@@ -476,10 +476,10 @@ export default {
             console.log('默认的口味为：', this.dishFlavor);
             // 添加默认的口味
             this.addOneItemToFlavors(flavorName, flavors[i].value[0]);
-            // 口味编辑表单
-            this.visualDishFlavorDialog = true;
-            console.log('在Dialog被关闭前，后续指令会继续执行，所以这里把函数放到Dialog的确认键中');
           }
+          // 打开口味编辑表单
+          this.visualDishFlavorDialog = true;
+          console.log('在Dialog被关闭前，后续指令会继续执行，所以这里把函数放到Dialog的确认键中');
         } else { //inCart
           this.addDishToShopCart(menuRow, way);
         }
