@@ -46,7 +46,7 @@
               </el-table-column>
               <el-table-column label="操作" min-width="20%">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="danger" @click="remindTheOrder(scope.row.id)">
+                  <el-button size="mini" type="danger" @click="remindTheOrder(scope.row)">
                     催单
                   </el-button>
                   <el-button size="mini" type="primary" @click="getDetailedOrder(scope.row.id)">
@@ -154,8 +154,12 @@ export default {
       console.log('订单详情为：', this.orderDetailList);
       this.dialogVisible = true;
     },
-    async remindTheOrder(id) {
-      let response = await remindOrder(id);
+    async remindTheOrder(row) {
+      if( row.status >= 5){
+        alert('订单已完成/取消/退款');
+        return;
+      }
+      let response = await remindOrder(row.id);
       if (response.data.code == 1) {
         console.log('催单成功,请稍等');
       } else {
