@@ -53,6 +53,7 @@
                 </el-form-item>
                 <el-form-item label="选择口味">
                   <template v-for="(flavorName, index) in flavorTypes">
+                    <!-- 每一行商品的el-dialog都会一起渲染完，这样不太好，应该有懒加载之类的可以解决这个性能消耗问题 -->
                     <el-select v-if="existFlavor(flavorName)" :key="flavorName" v-model="dishFlavorItems[index]"
                       @change="addOneItemToFlavors(flavorName, dishFlavorItems[index])">
                       <el-option v-for="item in getFlavorOptions(flavorName)" :key="item" :label="item" :value="item">
@@ -104,7 +105,7 @@
               <!-- <p>这是D {{ scope.row.name }}</p> -->
             </el-dialog>
             <!-- 套餐加入到购物车需要的对话框 -->
-            <el-button size="mini" type="danger" @click="deleteFromCart(scope.row.name)">
+            <el-button size="mini" type="danger" @click="deleteFromCart(scope.row)">
               去掉
               <!-- 能够正常显示 -->
               <!-- <p>这是B {{ scope.row.name }}</p> -->
@@ -282,10 +283,10 @@ export default {
         'description': '',
         'flavors': [],
       },
-      dishFlavorItems: ['甜度', '温度', '忌口', '辣度'],//变量
-      flavorTypes: ['甜度', '温度', '忌口', '辣度'],//常量
+      dishFlavorItems: ['甜味', '温度', '忌口', '辣度'],//变量
+      flavorTypes: ['甜味', '温度', '忌口', '辣度'],//常量
       flavorDict: { //对应其下标即可
-        '甜度': 0,
+        '甜味': 0,
         '温度': 1,
         '忌口': 2,
         '辣度': 3
@@ -465,17 +466,20 @@ export default {
           // 遍历菜品自己规定好的口味
           for (let i = 0; i < flavors.length; ++i) {
             // 解析后端返回的字符串为列表
+            // 比如解析"["无糖","少糖","半糖"]"字符串为列表
             if (typeof (flavors[i].value) == 'string') {
               flavors[i].value = JSON.parse(flavors[i].value);
             }
 
             let flavorName = flavors[i].name;
-            console.log('此时序号为', this.flavorDict[flavorName]);
             // 添加菜品自己规定好的口味
             this.dishFlavorItems[this.flavorDict[flavorName]] = flavors[i].value[0]// 这里默认取某种口味的第一项，可能是甜味中的无糖或半塘
             console.log('默认的口味为：', this.dishFlavor);
             // 添加默认的口味
             this.addOneItemToFlavors(flavorName, flavors[i].value[0]);
+
+            console.log('此时序号为', this.flavorDict[flavorName]);
+
           }
           // 打开口味编辑表单
           this.visualDishFlavorDialog = true;
@@ -539,7 +543,7 @@ export default {
         let flavorName = flavors[i].name;
         // 找到存在的口味
         if (flavorName == predictFlavor) {
-          console.log('存在口味', flavorName)
+          // console.log('存在口味', flavorName)
           return true;
         }
       }

@@ -15,7 +15,7 @@ router.beforeEach(async (to: Route, _: Route, next: any) => {
   // next();
 
   // 这里设置了2种判别方式！！！！！
-  if (Cookies.get('token')||localStorage.getItem('token')) {
+  if (Cookies.get('token')||localStorage.getItem('authentication')) {
     next();
     console.log('存在token，验证成功！');
   } else {
